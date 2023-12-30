@@ -60,13 +60,11 @@ class Tetris {
         for (let i = 0; i < parts.length; i++) {
             const { x, y } = parts[i];
 
-            if (y !== this.gridY - 1) {
+            if (this.grid[y + my]) {
                 canMove = this.grid[y + my][x + mx] === this.actualPieceId || this.grid[y + my][x + mx] === 0;
             } else {
-                canMove = false;
+                break;
             }
-
-            if (!canMove) break;
         }
 
 

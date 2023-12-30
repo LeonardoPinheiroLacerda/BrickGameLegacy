@@ -12,10 +12,6 @@ class Piece {
 
         if (centerCell.y === 0) return false;
 
-        // this.parts = [centerCell];
-        // this.rotateStatus = tmpRotateStatus;
-        // return true; 
-
         const tmpParts = this.getParts(centerCell, tmpRotateStatus);
 
         let canRotate = true;
