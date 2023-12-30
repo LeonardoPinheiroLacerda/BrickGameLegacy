@@ -1,0 +1,71 @@
+class Piece5 extends Piece {
+    constructor(gridX) {
+
+        //Quantidade de estados possiveis
+        //Id
+        super(0, 5);
+
+        const middleCell = Math.floor(gridX / 2);
+
+        this.rotateStatus = 0;
+        const startCenterCell = { x: middleCell, y: 0 };
+
+        this.parts = this.getParts(startCenterCell, this.rotateStatus);
+    }
+
+    getParts(centerCell, rotateStatus) {
+        const { x, y } = centerCell;
+
+        switch (rotateStatus) {
+            case 0:
+                return [
+                    { x: x - 1, y },
+                    { x, y },
+                    { x: x - 1, y: y + 1 },
+                    { x, y: y + 1 },
+
+                ]
+
+
+        }
+    }
+
+    getPreviewParts() {
+        switch (this.rotateStatus) {
+            case 0:
+                return [
+                    [0, 0, 0, 0],
+                    [0, 1, 1, 0],
+                    [0, 1, 1, 0],
+                    [0, 0, 0, 0]
+                ]
+        }
+    }
+
+    findCenterCell(grid, actualPieceId) {
+
+        let firstX;
+        let firstY;
+
+        for (let y = 0; y < grid.length; y++) {
+            const row = grid[y];
+            for (let x = 0; x < row.length; x++) {
+                const cell = row[x];
+
+                if (cell == actualPieceId) {
+                    firstX = x;
+                    firstY = y;
+                    break;
+                }
+
+            }
+        }
+
+        switch (this.rotateStatus) {
+            case 0:
+                return { x: firstX + 1, y: firstY - 1 };
+        }
+
+    }
+
+}
