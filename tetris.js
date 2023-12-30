@@ -7,9 +7,9 @@ class Tetris {
         /** @type{CanvasRenderingContext2D} */
         this.context = this.canvas.getContext('2d');
 
-        this.scoreWidth = this.width * 0.4;
+        this.hudWidth = this.width * 0.4;
 
-        this.gameDisplayWidth = this.width - this.scoreWidth;
+        this.gameDisplayWidth = this.width - this.hudWidth;
         this.gameDisplayMargin = this.width * 0.04;
 
         this.gridX = 11;
@@ -30,8 +30,6 @@ class Tetris {
 
         this.moveInterval = this.maxMoveInterval;
         this.frameCount = this.maxMoveInterval;
-
-        this.paused = false;
 
         this.score = 0;
 
@@ -63,8 +61,10 @@ class Tetris {
             if (this.grid[y + my]) {
                 canMove = this.grid[y + my][x + mx] === this.actualPieceId || this.grid[y + my][x + mx] === 0;
             } else {
-                break;
+                canMove = false;
             }
+
+            if (!canMove) break;
         }
 
 
@@ -99,11 +99,9 @@ class Tetris {
 
         const parts = this.actualPiece.parts
 
-
-        //Game over precisa ser revisto
         const isGameOver = parts
             .map(xy => this.grid[xy.y][xy.x])
-            .every(cell => cell !== 0);
+            .some(cell => cell !== 0);
 
         if (!isGameOver) {
             new Audio('./assets/sounds/spawn.wav')
@@ -149,7 +147,7 @@ class Tetris {
                     break;
             }
 
-            nextId = this.nextPiece.id;
+            nextId = this.nextPiece?.id;
 
         } while (actualId === nextId && nextId !== null);
     }
@@ -174,7 +172,6 @@ class Tetris {
             } catch { }
         }
 
-        // this.paused = true
     }
 
     mapKeys() {
@@ -465,10 +462,6 @@ class Tetris {
                     this.spawnPiece();
                 }
 
-            }
-
-            if (this.paused) {
-                clearInterval(this.interval);
             }
 
         }, 1000 / 30);
