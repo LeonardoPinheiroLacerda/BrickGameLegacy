@@ -278,8 +278,8 @@ class Tetris {
             ? 0
             : parseInt(localStorage.getItem("hiscore"));
 
-        this.context.fillText("Hi-Score", this.width * 0.7, this.height * 0.2);
-        this.context.fillText(hiScore, this.width * 0.7, this.height * 0.25);
+        this.context.fillText("Hi-Score", this.width * 0.7, this.height * 0.23);
+        this.context.fillText(hiScore, this.width * 0.7, this.height * 0.28);
 
         if (this.nextPiece) {
             const preview = this.nextPiece.getPreviewParts();
@@ -339,6 +339,7 @@ class Tetris {
     }
 
     drawClickAnywhere() {
+        this.context.fillStyle = "rgb(19, 26, 18)";
         this.context.font = this.width * 0.06 + "px retro-gaming";
         this.context.fillText("Click anywhere to", this.width * 0.1, this.height * 0.275);
         this.context.fillText("start or restart.", this.width * 0.112, this.height * 0.35)
