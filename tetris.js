@@ -1,6 +1,6 @@
 class Tetris {
 
-    constructor(width = 480, containerSelector = '#brick-game', createConsoleBody = false) {
+    constructor(width = 480, containerSelector = '#brick-game') {
 
         this.width = width;
 
@@ -36,7 +36,7 @@ class Tetris {
         this.lines = 0;
         this.linesToLevelUp = 3;
 
-        this.canvas = document.createElement('canvas');
+        this.canvas = document.createElement("canvas");
         this.body = document.querySelector(containerSelector);
 
         this.body.append(this.canvas);
@@ -44,12 +44,16 @@ class Tetris {
         /** @type{CanvasRenderingContext2D} */
         this.context = this.canvas.getContext('2d');
 
-        if (createConsoleBody) {
-            new BrickGameBody(this)
-                .create();
-        }
+        this.canvas.style.width = `${this.width}px`
+        this.canvas.style.height = `${this.height}px`
 
+        this.scale = Math.ceil(window.devicePixelRatio);
 
+        this.canvas.width = Math.floor(this.width * this.scale);
+        this.canvas.height = Math.floor(this.height * this.scale);
+
+        new BrickGameBody(this)
+            .create();
 
     }
 
@@ -315,8 +319,6 @@ class Tetris {
     }
 
     drawFrame() {
-        this.context.reset();
-
         this.context.rect(0, 0, this.width, this.height);
         this.context.fillStyle = '#adbeac';
         this.context.fill();
@@ -407,9 +409,13 @@ class Tetris {
 
     }
 
+    scaleCanvas() {
+        this.context.reset();
+        this.context.scale(this.scale, this.scale);
+    }
+
     init() {
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
+        this.scaleCanvas();
 
         this.mapKeys();
 
@@ -457,6 +463,8 @@ class Tetris {
             .play();
 
         this.interval = setInterval(() => {
+
+            this.scaleCanvas();
 
             this.drawFrame();
             this.drawData();
