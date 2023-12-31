@@ -1,11 +1,8 @@
 class Tetris {
 
-    constructor(width = 480, canvasSelector = '#brick-game') {
-        this.width = width;
-        this.canvas = document.querySelector(canvasSelector);
+    constructor(width = 480, containerSelector = '#brick-game', createConsoleBody = false) {
 
-        /** @type{CanvasRenderingContext2D} */
-        this.context = this.canvas.getContext('2d');
+        this.width = width;
 
         this.hudWidth = this.width * 0.4;
 
@@ -38,6 +35,22 @@ class Tetris {
 
         this.lines = 0;
         this.linesToLevelUp = 3;
+
+        this.canvas = document.createElement('canvas');
+        this.body = document.querySelector(containerSelector);
+
+        this.body.append(this.canvas);
+
+        /** @type{CanvasRenderingContext2D} */
+        this.context = this.canvas.getContext('2d');
+
+        if (createConsoleBody) {
+            new BrickGameBody(this)
+                .create();
+        }
+
+
+
     }
 
 

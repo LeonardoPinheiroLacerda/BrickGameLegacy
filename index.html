@@ -2,11 +2,32 @@
 
 <head>
     <title>Brick Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            background-color: rgb(0, 158, 247);
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        body>h1 {
+            font-family: 'retro-gaming';
+        }
+
+        body>h1>span {
+            color: red
+        }
+    </style>
 </head>
 
 <body>
-    <canvas id="brick-game"></canvas>
+    <h1>Oi Erica <span>❤</span></h1>
 
+    <div id="brick-game"></div>
+
+    <script src="brickGameBody.js"></script>
     <script src="utils.js"></script>
     <script src="piece.js"></script>
     <script src="piece1.js"></script>
@@ -18,7 +39,7 @@
     <script src="piece7.js"></script>
     <script src="tetris.js"></script>
     <script>
-        const tetris = new Tetris(480);
+        const tetris = new Tetris(420, "#brick-game", true);
         tetris.init();
     </script>
 
