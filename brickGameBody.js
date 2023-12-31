@@ -1,18 +1,41 @@
 class BrickGameBody {
 
-    constructor(tetris) {
+    constructor(tetris, {
+        onUp = () => { console.log("UP PRESSED") },
+        onDown = () => { console.log("DOWN PRESSED") },
+        onLeft = () => { console.log("LEFT PRESSED") },
+        onRight = () => { console.log("RIGHT PRESSED") },
+        onAction = () => { console.log("ACTION PRESSED") },
+        onOnOff = () => { console.log("ON_OFF PRESSED") },
+        onStart = () => { console.log("START PRESSED") },
+        onSound = () => { console.log("SOUND PRESSED") },
+        onReset = () => { console.log("RESET PRESSED") }
+    } = {}) {
         /**@type{Tetris} */
         this.tetris = tetris;
+
+        this.onUp = onUp;
+        this.onDown = onDown;
+        this.onLeft = onLeft;
+        this.onRight = onRight;
+        this.onAction = onAction;
+        this.onOnOff = onOnOff;
+        this.onStart = onStart;
+        this.onSound = onSound;
+        this.onReset = onReset;
     }
 
     setVariables(width, height) {
         const root = document.querySelector(":root");
 
         root.style.setProperty("--color", "rgb(0, 68, 187)");
-        root.style.setProperty("--color-shadow", "rgb(1, 28, 74)")
+        root.style.setProperty("--color-shadow", "rgb(1, 28, 74)");
+        root.style.setProperty("--color-shadow-reflexion", "rgb(3, 94, 255)");
 
         root.style.setProperty("--button-color", 'rgb(247, 222, 57)');
-        root.style.setProperty("--button-color-reflexion", "rgb(250, 241, 185)")
+        root.style.setProperty("--button-color-reflexion", "rgb(250, 241, 185)");
+
+        root.style.setProperty("--dispersion", '5px')
 
         root.style.setProperty("--width", parseInt(this.tetris.width) + "px");
         root.style.setProperty("--height", parseInt(this.tetris.height) + "px");
@@ -53,48 +76,57 @@ class BrickGameBody {
         upButton.classList.add("btn");
         upButton.classList.add("direction-btn");
         upButton.classList.add("up-btn");
+        upButton.addEventListener("click", this.onUp);
         controlContainer.append(upButton);
 
         const downButton = document.createElement("button");
         downButton.classList.add("btn");
         downButton.classList.add("direction-btn");
         downButton.classList.add("down-btn");
+        downButton.addEventListener("click", this.onDown);
         controlContainer.append(downButton);
 
         const rightButton = document.createElement("button");
         rightButton.classList.add("btn");
         rightButton.classList.add("direction-btn");
         rightButton.classList.add("right-btn");
+        rightButton.addEventListener("click", this.onRight);
         controlContainer.append(rightButton);
 
         const LeftButton = document.createElement("button");
         LeftButton.classList.add("btn");
         LeftButton.classList.add("direction-btn");
         LeftButton.classList.add("left-btn");
+        LeftButton.addEventListener("click", this.onLeft);
         controlContainer.append(LeftButton);
 
-        const confirmButton = document.createElement("button");
-        confirmButton.classList.add("lg-btn");
-        controlContainer.append(confirmButton);
+        const actionButton = document.createElement("button");
+        actionButton.classList.add("lg-btn");
+        actionButton.addEventListener("click", this.onAction);
+        controlContainer.append(actionButton);
 
         const onOffButton = document.createElement("button");
         onOffButton.classList.add("sm-btn");
         onOffButton.classList.add("on-off-btn");
+        onOffButton.addEventListener("click", this.onOnOff);
         controlContainer.append(onOffButton);
 
         const startButton = document.createElement("button");
         startButton.classList.add("sm-btn");
         startButton.classList.add("start-btn");
+        startButton.addEventListener("click", this.onStart);
         controlContainer.append(startButton);
 
         const soundButton = document.createElement("button");
         soundButton.classList.add("sm-btn");
         soundButton.classList.add("sound-btn");
+        soundButton.addEventListener("click", this.onSound);
         controlContainer.append(soundButton);
 
         const resetButton = document.createElement("button");
         resetButton.classList.add("sm-btn");
         resetButton.classList.add("reset-btn");
+        resetButton.addEventListener("click", this.onReset);
         controlContainer.append(resetButton);
 
     }

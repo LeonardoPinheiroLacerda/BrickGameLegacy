@@ -9,7 +9,9 @@
     width: var(--width);
     padding: calc(var(--width) * 0.15);
 
-    box-shadow: calc(var(--width) * -0.05) calc(var(--width) * 0.05) black;
+    box-shadow:
+        calc(var(--width) * -0.03) calc(var(--width) * 0.03) var(--dispersion) black,
+        calc(var(--width) * -0.02) calc(var(--width) * 0.02) var(--dispersion) var(--color-shadow-reflexion) inset;
 }
 
 .brick-game-body .frame {
@@ -45,17 +47,17 @@
 
 .brick-game-body>.controls-container {
     margin-top: calc(var(--width) * 0.15);
-    height: calc(var(--width) * 0.6);
+    height: calc(var(--width) * 0.75);
     position: relative;
 }
 
 .brick-game-body>.controls-container>.btn {
 
-    transition-property: transform, box-shadow, border;
-    transition-duration: .2s;
+    transition-property: transform, box-shadow;
+    transition-duration: .15s;
 
-    width: calc(var(--width) * 0.14);
-    height: calc(var(--width) * 0.14);
+    width: calc(var(--width) * 0.16);
+    height: calc(var(--width) * 0.16);
 
     background-color: var(--button-color);
     border-radius: 50%;
@@ -64,16 +66,14 @@
     outline: none;
 
     box-shadow:
-        calc(var(--width) * -0.01) calc(var(--width) * 0.01) var(--color-shadow),
-        calc(var(--width) * -0.0125) calc(var(--width) * 0.0125) var(--button-color-reflexion) inset;
+        calc(var(--width) * -0.01) calc(var(--width) * 0.01) var(--dispersion) var(--color-shadow),
+        calc(var(--width) * -0.0125) calc(var(--width) * 0.0125) var(--dispersion) var(--button-color-reflexion) inset;
 
 }
 
 .brick-game-body>.controls-container>.btn:active {
-
     box-shadow: 0px 0px var(--color-shadow);
     transform: translateX(calc(var(--width) * -0.005)) translateY(calc(var(--width) * 0.005));
-    border: calc(var(--width) * 0.0070) solid black
 }
 
 .brick-game-body>.controls-container>.direction-btn.up-btn {
@@ -81,7 +81,7 @@
     background-size: contain;
 
     position: absolute;
-    top: calc(var(--width) * 0.2);
+    top: calc(var(--width) * 0.3);
     left: calc(var(--width) * 0.15);
 }
 
@@ -90,7 +90,7 @@
     background-size: contain;
 
     position: absolute;
-    top: calc(var(--width) * 0.45);
+    top: calc(var(--width) * 0.6);
     left: calc(var(--width) * 0.15);
 }
 
@@ -100,7 +100,7 @@
 
 
     position: absolute;
-    top: calc(var(--width) * 0.325);
+    top: calc(var(--width) * 0.45);
     left: calc(var(--width) * 0.3);
 }
 
@@ -109,7 +109,7 @@
     background-size: contain;
 
     position: absolute;
-    top: calc(var(--width) * 0.325);
+    top: calc(var(--width) * 0.45);
     left: calc(var(--width) * 0);
 }
 
@@ -168,11 +168,11 @@
 
 .brick-game-body>.controls-container>.lg-btn {
 
-    transition-property: transform, box-shadow, border;
-    transition-duration: .2s;
+    transition-property: transform, box-shadow;
+    transition-duration: .15s;
 
-    width: calc(var(--width) * 0.2);
-    height: calc(var(--width) * 0.2);
+    width: calc(var(--width) * 0.25);
+    height: calc(var(--width) * 0.25);
 
     background-color: var(--button-color);
     border-radius: 50%;
@@ -181,12 +181,12 @@
     outline: none;
 
     box-shadow:
-        calc(var(--width) * -0.015) calc(var(--width) * 0.015) var(--color-shadow),
-        calc(var(--width) * -0.0125) calc(var(--width) * 0.0125) var(--button-color-reflexion) inset;
+        calc(var(--width) * -0.015) calc(var(--width) * 0.015) var(--dispersion) var(--color-shadow),
+        calc(var(--width) * -0.0125) calc(var(--width) * 0.0125) var(--dispersion) var(--button-color-reflexion) inset;
 
 
     position: absolute;
-    top: calc(var(--width) * 0.30);
+    top: calc(var(--width) * 0.4);
     right: calc(var(--width) * 0.1);
 
     background-image: url('./assets/images/cross.svg');
@@ -197,7 +197,6 @@
 
     box-shadow: 0px 0px var(--color-shadow);
     transform: translateX(calc(var(--width) * -0.0075)) translateY(calc(var(--width) * 0.0075));
-    border: calc(var(--width) * 0.0070) solid black
 }
 
 .brick-game-body>.controls-container>.lg-btn::after {
@@ -210,14 +209,14 @@
     height: 100%;
     width: 100%;
     left: 0%;
-    top: -50%;
+    top: -40%;
 }
 
 
 .brick-game-body>.controls-container>.sm-btn {
 
-    transition-property: transform, box-shadow, border;
-    transition-duration: .2s;
+    transition-property: transform, box-shadow;
+    transition-duration: .15s;
 
     width: calc(var(--width) * 0.075);
     height: calc(var(--width) * 0.075);
@@ -229,14 +228,13 @@
     outline: none;
 
     box-shadow:
-        calc(var(--width) * -0.005) calc(var(--width) * 0.005) var(--color-shadow),
-        calc(var(--width) * -0.0075) calc(var(--width) * 0.0075) var(--button-color-reflexion) inset;
+        calc(var(--width) * -0.005) calc(var(--width) * 0.005) var(--dispersion) var(--color-shadow),
+        calc(var(--width) * -0.0075) calc(var(--width) * 0.0075) var(--dispersion) var(--button-color-reflexion) inset;
 }
 
 .brick-game-body>.controls-container>.sm-btn:active {
     box-shadow: 0px 0px var(--color-shadow);
     transform: translateX(calc(var(--width) * -0.0025)) translateY(calc(var(--width) * 0.0025));
-    border: calc(var(--width) * 0.0070) solid black
 }
 
 .brick-game-body>.controls-container>.sm-btn.on-off-btn {
@@ -319,4 +317,8 @@
 .brick-game-body canvas {
     position: relative;
     z-index: 99;
+
+    box-shadow:
+        calc(var(--width) * -0.01) calc(var(--width) * 0.01) var(--dispersion) var(--color-shadow),
+        calc(var(--width) * 0.01) calc(var(--width) * -0.01) var(--dispersion) var(--color-shadow-reflexion);
 }

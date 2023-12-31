@@ -204,6 +204,7 @@ class Tetris {
                     break;
                 case 'w':
                 case 'W':
+                case ' ':
                     this.turn();
                     break;
             }
