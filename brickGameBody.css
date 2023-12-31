@@ -1,7 +1,5 @@
 .brick-game-body {
 
-    touch-action: manipulation;
-
     position: relative;
 
     background-color: var(--color);

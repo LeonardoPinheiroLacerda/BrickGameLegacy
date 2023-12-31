@@ -40,8 +40,16 @@
     <script src="piece7.js"></script>
     <script src="tetris.js"></script>
     <script>
-        const tetris = new Tetris(420, "#brick-game", true);
-        tetris.init();
+
+        if (screen.width < 640 || screen.height < 480) {
+            const tetris = new Tetris(document.body.clientWidth * 0.65, "#brick-game", true);
+            tetris.init();
+        } else {
+            const tetris = new Tetris(420, "#brick-game", true);
+            tetris.init();
+        }
+
+
     </script>
 
 </body>
