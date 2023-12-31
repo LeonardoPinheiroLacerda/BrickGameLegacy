@@ -31,7 +31,7 @@ class Piece {
     rotate(grid, actualPieceId) {
         const tmpRotateStatus = this.rotateStatus == this.rotateStatusCount ? 0 : this.rotateStatus + 1;
 
-        const centerCell = this.findCenterCell(grid, actualPieceId, tmpRotateStatus);
+        const centerCell = this.findCenterCell(grid, actualPieceId);
 
         if (centerCell.y === 0) return false;
 
