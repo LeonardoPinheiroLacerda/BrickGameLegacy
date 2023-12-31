@@ -86,19 +86,19 @@ class BrickGameBody {
         downButton.addEventListener("click", this.onDown);
         controlContainer.append(downButton);
 
-        const rightButton = document.createElement("button");
-        rightButton.classList.add("btn");
-        rightButton.classList.add("direction-btn");
-        rightButton.classList.add("left-btn");
-        rightButton.addEventListener("click", this.onRight);
-        controlContainer.append(rightButton);
-
         const LeftButton = document.createElement("button");
         LeftButton.classList.add("btn");
         LeftButton.classList.add("direction-btn");
-        LeftButton.classList.add("right-btn");
-        LeftButton.addEventListener("click", this.onLeft);
+        LeftButton.classList.add("left-btn");
+        LeftButton.addEventListener("click", this.onRight);
         controlContainer.append(LeftButton);
+
+        const rightButton = document.createElement("button");
+        rightButton.classList.add("btn");
+        rightButton.classList.add("direction-btn");
+        rightButton.classList.add("right-btn");
+        rightButton.addEventListener("click", this.onLeft);
+        controlContainer.append(rightButton);
 
         const actionButton = document.createElement("button");
         actionButton.classList.add("lg-btn");
