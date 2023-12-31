@@ -24,7 +24,7 @@
 </head>
 
 <body>
-    <h1>Oi Erica <span>❤</span></h1>
+    <!-- <h1>Oi Erica <span>❤</span></h1> -->
 
     <div id="brick-game"></div>
 
@@ -41,11 +41,13 @@
     <script src="tetris.js"></script>
     <script>
 
+        let tetris;
+
         if (screen.width < 640 || screen.height < 480) {
-            const tetris = new Tetris(document.body.clientWidth * 0.65, "#brick-game", true);
-            tetris.init();
+            tetris = new Tetris(document.body.clientWidth * 0.7, "#brick-game", true);
+            // tetris.init();
         } else {
-            const tetris = new Tetris(420, "#brick-game", true);
+            tetris = new Tetris(420, "#brick-game", true);
             tetris.init();
         }
 

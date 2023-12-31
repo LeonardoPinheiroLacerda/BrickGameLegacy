@@ -1,11 +1,11 @@
 class BrickGameBody {
 
     constructor(tetris, {
-        onUp = () => { console.log("UP PRESSED") },
-        onDown = () => { console.log("DOWN PRESSED") },
-        onLeft = () => { console.log("LEFT PRESSED") },
-        onRight = () => { console.log("RIGHT PRESSED") },
-        onAction = () => { console.log("ACTION PRESSED") },
+        onUp = () => { navigator.vibrate(150); console.log("UP PRESSED") },
+        onDown = () => { navigator.vibrate(150); console.log("DOWN PRESSED") },
+        onLeft = () => { navigator.vibrate(150); console.log("LEFT PRESSED") },
+        onRight = () => { navigator.vibrate(150); console.log("RIGHT PRESSED") },
+        onAction = () => { navigator.vibrate(150); console.log("ACTION PRESSED") },
         onOnOff = () => { console.log("ON_OFF PRESSED") },
         onStart = () => { console.log("START PRESSED") },
         onSound = () => { console.log("SOUND PRESSED") },
@@ -35,7 +35,7 @@ class BrickGameBody {
         root.style.setProperty("--button-color", 'rgb(247, 222, 57)');
         root.style.setProperty("--button-color-reflexion", "rgb(250, 241, 185)");
 
-        root.style.setProperty("--dispersion", '5px')
+        root.style.setProperty("--dispersion", '3px')
 
         root.style.setProperty("--width", parseInt(this.tetris.width) + "px");
         root.style.setProperty("--height", parseInt(this.tetris.height) + "px");
@@ -89,14 +89,14 @@ class BrickGameBody {
         const rightButton = document.createElement("button");
         rightButton.classList.add("btn");
         rightButton.classList.add("direction-btn");
-        rightButton.classList.add("right-btn");
+        rightButton.classList.add("left-btn");
         rightButton.addEventListener("click", this.onRight);
         controlContainer.append(rightButton);
 
         const LeftButton = document.createElement("button");
         LeftButton.classList.add("btn");
         LeftButton.classList.add("direction-btn");
-        LeftButton.classList.add("left-btn");
+        LeftButton.classList.add("right-btn");
         LeftButton.addEventListener("click", this.onLeft);
         controlContainer.append(LeftButton);
 

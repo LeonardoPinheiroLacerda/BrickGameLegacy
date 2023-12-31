@@ -2,6 +2,12 @@ class Tetris {
 
     constructor(width = 480, containerSelector = '#brick-game') {
 
+        //Grid
+        this.gridX = 11;
+        this.gridY = 18;
+        this.grid = [];
+
+        //Dimensions
         this.width = width;
 
         this.hudWidth = this.width * 0.4;
@@ -9,25 +15,26 @@ class Tetris {
         this.gameDisplayWidth = this.width - this.hudWidth;
         this.gameDisplayMargin = this.width * 0.04;
 
-        this.gridX = 11;
-        this.gridY = 18;
-        this.grid = [];
-
         this.cellMargin = this.width * 0.005;
         this.cellSize = this.gameDisplayWidth / this.gridX - this.cellMargin - (this.cellMargin / this.gridX);
 
         this.height = this.cellSize * this.gridY + (this.cellMargin * (this.gridY + 1)) + (this.gameDisplayMargin * 2);
 
+        //Pieces
         this.actualPieceId = 1;
 
         this.nextPiece = null;
         this.actualPiece;
 
+
+        //Speed
         this.maxMoveInterval = 20;
 
         this.moveInterval = this.maxMoveInterval;
         this.frameCount = this.maxMoveInterval;
 
+
+        //Score and level
         this.score = 0;
 
         this.level = 1;
@@ -36,6 +43,8 @@ class Tetris {
         this.lines = 0;
         this.linesToLevelUp = 3;
 
+
+        //Canvas
         this.canvas = document.createElement("canvas");
         this.body = document.querySelector(containerSelector);
 
@@ -44,6 +53,8 @@ class Tetris {
         /** @type{CanvasRenderingContext2D} */
         this.context = this.canvas.getContext('2d');
 
+
+        //Correção de escala para telas com dpi maior
         this.canvas.style.width = `${this.width}px`
         this.canvas.style.height = `${this.height}px`
 
@@ -52,14 +63,94 @@ class Tetris {
         this.canvas.width = Math.floor(this.width * this.scale);
         this.canvas.height = Math.floor(this.height * this.scale);
 
-        new BrickGameBody(this)
+
+        //Carregando recursos e inicializando tela desligada
+        this.inactiveCell = new Image();
+        this.inactiveCell.src = "./assets/images/inactiveCell.svg";
+
+        this.activeCell = new Image();
+        this.activeCell.src = "./assets/images/activeCell.svg";
+
+        this.inactiveCell.onload = () => {
+
+            this.turnOff();
+            this.mapKeys();
+
+            const font = new FontFace(
+                "retro-gaming",
+                "url(./assets/fonts/digital-7.monoitalic.ttf)"
+            );
+            font.load().then(() => {
+                document.fonts.add(font);
+            });
+
+        }
+
+        //States
+        this.isOn = false;
+        this.isStart = false;
+        this.isGameOver = false;
+
+        //Corpo do console e configurando botoes
+        new BrickGameBody(
+            this,
+            {
+                onOnOff: () => {
+                    if (this.isOn) {
+                        this.turnOff();
+                    } else {
+                        this.turnOn();
+                    }
+                },
+
+                onStart: () => {
+                    if (!this.isOn) return;
+                    if (this.isStart) {
+                        this.pause();
+                    } else {
+                        this.start();
+                    }
+                },
+
+                onReset: () => {
+                    if (!this.isOn) return;
+                    this.reset();
+                },
+
+                onAction: () => {
+                    if (!this.isStart) return;
+                    this.pressSpace();
+                },
+
+                onUp: () => {
+                    if (!this.isStart) return;
+                    this.pressUp();
+                },
+
+                onDown: () => {
+                    if (!this.isStart) return;
+                    this.pressDown();
+                },
+
+                onRight: () => {
+                    if (!this.isStart) return;
+                    this.pressRight();
+                },
+
+                onLeft: () => {
+                    if (!this.isStart) return;
+                    this.pressLeft();
+                },
+            }
+
+        )
             .create();
 
     }
 
 
+    //Game behaviors
     move(mx, my) {
-
         const parts = [];
 
         for (let y = this.gridY - 1; y >= 0; y--) {
@@ -84,7 +175,6 @@ class Tetris {
             if (!canMove) break;
         }
 
-
         if (canMove) {
             parts.forEach(({ x, y }) => {
                 this.grid[y][x] = 0;
@@ -105,9 +195,7 @@ class Tetris {
 
 
     spawnPiece() {
-
         this.actualPieceId += 1;
-
         this.actualPiece = this.nextPiece;
 
         this.getNextPiece();
@@ -116,11 +204,11 @@ class Tetris {
 
         const parts = this.actualPiece.parts
 
-        const isGameOver = parts
+        this.isGameOver = parts
             .map(xy => this.grid[xy.y][xy.x])
             .some(cell => cell !== 0);
 
-        if (!isGameOver) {
+        if (!this.isGameOver) {
             new Audio('./assets/sounds/spawn.wav')
                 .play();
             parts.forEach(({ x, y }) => this.grid[y][x] = this.actualPieceId);
@@ -134,12 +222,10 @@ class Tetris {
     }
 
     getNextPiece() {
-
         let actualId = this.actualPiece?.id;
         let nextId = null;
 
         do {
-
             switch (getRandomInt(1, 10)) {
                 case 1:
                     this.nextPiece = new Piece1(this.gridX);
@@ -163,7 +249,6 @@ class Tetris {
                     this.nextPiece = new Piece7(this.gridX);
                     break;
             }
-
             nextId = this.nextPiece?.id;
 
         } while (actualId === nextId && nextId !== null);
@@ -191,37 +276,7 @@ class Tetris {
 
     }
 
-    mapKeys() {
-        document.body.addEventListener('keyup', ({ key }) => {
-            switch (key) {
-                case 'a':
-                case 'A':
-                    this.move(-1, 0);
-                    break;
-                case 'd':
-                case 'D':
-                    this.move(1, 0);
-                    break;
-                case 'w':
-                case 'W':
-                case ' ':
-                    this.turn();
-                    break;
-            }
-        })
-
-        document.body.addEventListener("keydown", ({ key }) => {
-            switch (key) {
-                case 's':
-                case 'S':
-                    this.moveInterval = 1;
-                    break;
-            }
-        })
-    }
-
     checkScore() {
-
         const linesCompleted = [];
 
         for (let y = this.grid.length - 1; y >= 0; y--) {
@@ -235,7 +290,6 @@ class Tetris {
         if (linesCompleted.length > 0) {
             new Audio('./assets/sounds/score.wav')
                 .play()
-
 
             this.lines += linesCompleted.length;
 
@@ -254,7 +308,6 @@ class Tetris {
                 this.grid.splice(y, 1);
             })
 
-
             //Repõe com linhas vazias
             while (this.grid.length < this.gridY) {
                 this.grid = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], ...this.grid];
@@ -267,22 +320,13 @@ class Tetris {
                     this.level = this.maxLevel;
                 }
             }
-
         }
-
     }
 
-    resetGrid() {
-        this.grid = (() => {
-            const grid = [];
-            for (let y = 0; y < this.gridY; y++) {
-                grid.push([]);
-                for (let x = 0; x < this.gridX; x++) {
-                    grid[y][x] = 0;
-                }
-            }
-            return grid;
-        })()
+    //Canvas drawing
+    scaleCanvas() {
+        this.context.reset();
+        this.context.scale(this.scale, this.scale);
     }
 
     drawData() {
@@ -373,20 +417,6 @@ class Tetris {
 
     }
 
-    gameOver() {
-        this.stop();
-
-        this.nextPiece = null;
-
-        this.resetGrid();
-        this.drawFrame();
-        this.drawData();
-
-        localStorage.setItem("hiscore", this.score);
-
-        this.drawGameOver();
-    }
-
     drawGameOver() {
         this.context.fillStyle = "rgb(19, 26, 18)";
         this.context.font = this.width * 0.11 + "px retro-gaming";
@@ -410,59 +440,91 @@ class Tetris {
 
     }
 
-    scaleCanvas() {
-        this.context.reset();
-        this.context.scale(this.scale, this.scale);
+
+    //States
+    resetGrid() {
+        this.grid = (() => {
+            const grid = [];
+            for (let y = 0; y < this.gridY; y++) {
+                grid.push([]);
+                for (let x = 0; x < this.gridX; x++) {
+                    grid[y][x] = 0;
+                }
+            }
+            return grid;
+        })()
     }
 
-    init() {
+    gameOver() {
+
+        clearInterval(this.interval);
+
+        this.nextPiece = null;
+
         this.scaleCanvas();
-
-        this.mapKeys();
-
         this.resetGrid();
-        this.score = 0;
-        this.lines = 0;
-        this.level = 1;
+        this.drawFrame();
+        this.drawData();
 
-        this.inactiveCell = new Image();
-        this.inactiveCell.src = "./assets/images/inactiveCell.svg";
+        const actualHighScore = parseInt(localStorage.getItem("hiscore"));
 
-        this.activeCell = new Image();
-        this.activeCell.src = "./assets/images/activeCell.svg";
-
-        this.inactiveCell.onload = () => {
-            this.drawFrame();
-
-            const font = new FontFace(
-                "retro-gaming",
-                "url(./assets/fonts/digital-7.monoitalic.ttf)"
-            );
-            font.load().then(() => {
-                document.fonts.add(font);
-
-                this.drawWelcome();
-
-                this.canvas.addEventListener('click', () => this.run());
-
-            });
-
+        if (actualHighScore < this.score) {
+            localStorage.setItem("hiscore", this.score);
         }
 
+        this.lines = 0;
+        this.score = 0;
+        this.level = 1;
+
+        this.drawGameOver();
     }
 
-    run() {
-        this.stop();
+    //Actions
+    turnOn() {
+        this.isOn = true;
 
+        this.scaleCanvas();
+
+        this.resetGrid();
+        this.score = 0;
+        this.lines = 0;
+        this.level = 1;
+
+        this.drawFrame();
+        this.drawWelcome();
+    }
+
+    turnOff() {
+        this.isOn = false;
+        this.pause();
+
+        this.scaleCanvas();
+
+        this.resetGrid();
+        this.score = 0;
+        this.lines = 0;
+        this.level = 1;
+
+        this.drawFrame();
+    }
+
+    reset() {
         this.lines = 0;
         this.score = 0;
         this.level = 1;
 
         this.resetGrid();
+
+        this.start();
+    }
+
+    start() {
+        this.isStart = true;
 
         new Audio('./assets/sounds/start.wav')
             .play();
 
+        clearInterval(this.interval);
         this.interval = setInterval(() => {
 
             this.scaleCanvas();
@@ -488,11 +550,69 @@ class Tetris {
             }
 
         }, 1000 / 30);
-
     }
 
-    stop() {
+    pause() {
+        this.isStart = false;
+
         clearInterval(this.interval);
     }
+
+    sound() {
+
+    }
+
+    pressUp() {
+        this.turn();
+    }
+
+    pressDown() {
+        this.moveInterval = 1;
+    }
+
+    pressLeft() {
+        this.move(1, 0);
+    }
+
+    pressRight() {
+        this.move(-1, 0);
+    }
+
+    pressSpace() {
+        this.turn();
+    }
+
+    //Keys
+    mapKeys() {
+        document.body.addEventListener('keyup', ({ key }) => {
+            switch (key) {
+                case 'a':
+                case 'A':
+                    this.pressRight();
+                    break;
+                case 'd':
+                case 'D':
+                    this.pressLeft();
+                    break;
+                case 'w':
+                case 'W':
+                    this.pressUp();
+                    break;
+                case ' ':
+                    this.pressSpace();
+                    break;
+            }
+        })
+
+        document.body.addEventListener("keydown", ({ key }) => {
+            switch (key) {
+                case 's':
+                case 'S':
+                    this.pressDown();
+                    break;
+            }
+        })
+    }
+
 
 }

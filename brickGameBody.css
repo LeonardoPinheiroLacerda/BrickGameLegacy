@@ -263,7 +263,7 @@
 }
 
 .brick-game-body>.controls-container>.sm-btn.start-btn::after {
-    content: 'Start';
+    content: 'Start Pause';
     font-family: 'retro-gaming';
     font-size: calc(var(--width) * 0.05);
     color: white;
@@ -272,7 +272,7 @@
     height: 100%;
     width: 100%;
     left: -40%;
-    top: -100%;
+    top: -175%;
 }
 
 .brick-game-body>.controls-container>.sm-btn.sound-btn {
