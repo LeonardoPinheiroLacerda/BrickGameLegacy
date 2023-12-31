@@ -400,7 +400,7 @@ class Tetris {
         this.context.fillText("How to play?", this.width * 0.1, this.height * 0.62)
 
         this.context.font = this.width * 0.05 + "px retro-gaming";
-        this.context.fillText("W: rotate", this.width * 0.09, this.height * 0.7);
+        this.context.fillText("W/Space: rotate", this.width * 0.09, this.height * 0.7);
         this.context.fillText("A: move left", this.width * 0.09, this.height * 0.76);
         this.context.fillText("S: move down faster", this.width * 0.09, this.height * 0.82);
         this.context.fillText("D: move right", this.width * 0.09, this.height * 0.88);
