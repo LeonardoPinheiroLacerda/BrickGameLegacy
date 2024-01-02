@@ -3,35 +3,22 @@ class Piece {
     constructor(rotateStatusCount, id) {
         this.rotateStatusCount = rotateStatusCount;
         this.id = id;
+        this.parts = [];
     }
 
-    findCenterCell(grid, actualPieceId) {
+    findCenterCell() {
+        const firstPart = this.parts[0];
 
-        let firstX;
-        let firstY;
-
-        for (let y = 0; y < grid.length; y++) {
-            const row = grid[y];
-            for (let x = 0; x < row.length; x++) {
-                const cell = row[x];
-
-                if (cell == actualPieceId) {
-                    firstX = x;
-                    firstY = y;
-                    break;
-                }
-
-            }
-        }
+        const firstX = firstPart.x;
+        const firstY = firstPart.y;
 
         return { firstX, firstY };
-
     }
 
-    rotate(grid, actualPieceId) {
+    rotate(grid, pieceId) {
         const tmpRotateStatus = this.rotateStatus == this.rotateStatusCount ? 0 : this.rotateStatus + 1;
 
-        const centerCell = this.findCenterCell(grid, actualPieceId);
+        const centerCell = this.findCenterCell();
 
         if (centerCell.y === 0) return false;
 
@@ -48,7 +35,7 @@ class Piece {
             }
 
             if (grid[y]) {
-                if (grid[y][x] !== 0 && grid[y][x] !== actualPieceId) {
+                if (grid[y][x] !== 0 && grid[y][x] !== pieceId) {
                     canRotate = false;
                     break;
                 }
@@ -56,6 +43,15 @@ class Piece {
         }
 
         if (canRotate) {
+
+            this.parts.forEach(({ y, x }) => {
+                grid[y][x] = 0
+            })
+
+            tmpParts.forEach(({ y, x }) => {
+                grid[y][x] = pieceId
+            })
+
             this.parts = tmpParts;
             this.rotateStatus = tmpRotateStatus;
         }
@@ -63,5 +59,45 @@ class Piece {
         return canRotate;
 
     }
+
+    move(mx, my, grid, pieceId) {
+
+        let canMove = false;
+
+        for (let i = 0; i < this.parts.length; i++) {
+            const { x, y } = this.parts[i];
+
+            if (grid[y + my]) {
+                canMove = grid[y + my][x + mx] === pieceId || grid[y + my][x + mx] === 0;
+            } else {
+                canMove = false;
+            }
+
+            if (!canMove) break;
+        }
+
+        if (canMove) {
+            this.parts.forEach(({ x, y }) => {
+                grid[y][x] = 0;
+            })
+
+            this.parts = this.parts.map((actualPart) => {
+                return { x: actualPart.x + mx, y: actualPart.y + my }
+            })
+
+            this.parts.forEach(({ x, y }) => {
+                grid[y][x] = pieceId;
+            });
+
+
+            if (mx !== 0) {
+                new Audio('./assets/sounds/move.wav')
+                    .play();
+            }
+        }
+
+        return canMove;
+    }
+
 
 }

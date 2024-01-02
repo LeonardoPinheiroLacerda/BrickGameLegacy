@@ -23,9 +23,9 @@ class Tetris {
         //Pieces
         this.actualPieceId = 1;
 
-        this.nextPiece = null;
-        this.actualPiece;
+        this.nextPiece = this.getNextPiece();
 
+        this.actualPiece;
 
         //Speed
         this.maxMoveInterval = 20;
@@ -52,7 +52,6 @@ class Tetris {
 
         /** @type{CanvasRenderingContext2D} */
         this.context = this.canvas.getContext('2d');
-
 
         //Correção de escala para telas com dpi maior
         this.canvas.style.width = `${this.width}px`
@@ -92,7 +91,7 @@ class Tetris {
         this.isGameOver = false;
 
         //Corpo do console e configurando botoes
-        new BrickGameBody(
+        const body = new BrickGameBody(
             this,
             {
                 onOnOff: () => {
@@ -102,7 +101,6 @@ class Tetris {
                         this.turnOn();
                     }
                 },
-
                 onStart: () => {
                     if (!this.isOn) return;
                     if (this.isStart) {
@@ -111,107 +109,53 @@ class Tetris {
                         this.start();
                     }
                 },
-
                 onReset: () => {
                     if (!this.isOn) return;
                     this.reset();
                 },
-
                 onAction: () => {
                     if (!this.isStart) return;
                     this.pressSpace();
                 },
-
                 onUp: () => {
                     if (!this.isStart) return;
                     this.pressUp();
                 },
-
                 onDown: () => {
                     if (!this.isStart) return;
                     this.pressDown();
                 },
-
                 onRight: () => {
                     if (!this.isStart) return;
                     this.pressRight();
                 },
-
                 onLeft: () => {
                     if (!this.isStart) return;
                     this.pressLeft();
                 },
             }
 
-        )
-            .create();
+        );
+        body.create();
 
     }
 
-
-    //Game behaviors
-    move(mx, my) {
-        const parts = [];
-
-        for (let y = this.gridY - 1; y >= 0; y--) {
-            for (let x = 0; x < this.gridX; x++) {
-                if (this.grid[y][x] == this.actualPieceId) {
-                    parts.push({ y, x });
-                }
-            }
-        }
-
-        let canMove = false;
-
-        for (let i = 0; i < parts.length; i++) {
-            const { x, y } = parts[i];
-
-            if (this.grid[y + my]) {
-                canMove = this.grid[y + my][x + mx] === this.actualPieceId || this.grid[y + my][x + mx] === 0;
-            } else {
-                canMove = false;
-            }
-
-            if (!canMove) break;
-        }
-
-        if (canMove) {
-            parts.forEach(({ x, y }) => {
-                this.grid[y][x] = 0;
-            })
-
-            parts.forEach(({ x, y }) => {
-                this.grid[y + my][x + mx] = this.actualPieceId;
-            });
-
-            if (mx !== 0) {
-                new Audio('./assets/sounds/move.wav')
-                    .play();
-            }
-        }
-
-        return canMove;
-    }
-
-
-    spawnPiece() {
+    spawn() {
         this.actualPieceId += 1;
         this.actualPiece = this.nextPiece;
 
-        this.getNextPiece();
+        this.nextPiece = this.getNextPiece();
 
         if (!this.actualPiece) return;
 
-        const parts = this.actualPiece.parts
-
-        this.isGameOver = parts
+        this.isGameOver = this.actualPiece.parts
             .map(xy => this.grid[xy.y][xy.x])
             .some(cell => cell !== 0);
 
         if (!this.isGameOver) {
             new Audio('./assets/sounds/spawn.wav')
                 .play();
-            parts.forEach(({ x, y }) => this.grid[y][x] = this.actualPieceId);
+            this.actualPiece.parts.forEach(({ x, y }) => this.grid[y][x] = this.actualPieceId);
         } else {
             new Audio('./assets/sounds/gameover.wav')
                 .play();
@@ -228,52 +172,24 @@ class Tetris {
         do {
             switch (getRandomInt(1, 10)) {
                 case 1:
-                    this.nextPiece = new Piece1(this.gridX);
-                    break;
+                    return new Piece1(this.gridX);
                 case 2:
-                    this.nextPiece = new Piece2(this.gridX);
-                    break;
+                    return new Piece2(this.gridX);
                 case 3:
-                    this.nextPiece = new Piece3(this.gridX);
-                    break;
+                    return new Piece3(this.gridX);
                 case 4:
-                    this.nextPiece = new Piece4(this.gridX);
-                    break;
+                    return new Piece4(this.gridX);
                 case 5:
-                    this.nextPiece = new Piece5(this.gridX);
-                    break;
+                    return new Piece5(this.gridX);
                 case 6:
-                    this.nextPiece = new Piece6(this.gridX);
-                    break;
+                    return new Piece6(this.gridX);
                 case 7:
-                    this.nextPiece = new Piece7(this.gridX);
-                    break;
+                    return new Piece7(this.gridX);
             }
-            nextId = this.nextPiece?.id;
+            nextId = this.piece?.id;
+
 
         } while (actualId === nextId && nextId !== null);
-    }
-
-    turn() {
-        if (this.actualPiece.rotate(this.grid, this.actualPieceId)) {
-
-            for (let y = 0; y < this.grid.length; y++) {
-                for (let x = 0; x < this.grid[y].length; x++) {
-                    if (this.grid[y][x] === this.actualPieceId) {
-                        this.grid[y][x] = 0;
-                    }
-                }
-            }
-
-            try {
-                const parts = this.actualPiece.parts;
-                parts.forEach(({ x, y }) => this.grid[y][x] = this.actualPieceId);
-
-                new Audio('./assets/sounds/turn.wav')
-                    .play();
-            } catch { }
-        }
-
     }
 
     checkScore() {
@@ -543,9 +459,9 @@ class Tetris {
             this.frameCount += 1;
             if (this.frameCount % this.moveInterval === 0) {
 
-                if (!this.move(0, 1)) {
+                if (this.actualPiece == null || !this.actualPiece.move(0, 1, this.grid, this.actualPieceId)) {
                     this.checkScore();
-                    this.spawnPiece();
+                    this.spawn();
                 }
 
             }
@@ -564,7 +480,7 @@ class Tetris {
     }
 
     pressUp() {
-        this.turn();
+        this.actualPiece.rotate(this.grid, this.actualPieceId);
     }
 
     pressDown() {
@@ -572,15 +488,15 @@ class Tetris {
     }
 
     pressLeft() {
-        this.move(-1, 0);
+        this.actualPiece.move(-1, 0, this.grid, this.actualPieceId);
     }
 
     pressRight() {
-        this.move(1, 0);
+        this.actualPiece.move(1, 0, this.grid, this.actualPieceId);
     }
 
     pressSpace() {
-        this.turn();
+        this.actualPiece.rotate(this.grid, this.actualPieceId);
     }
 
     //Keys

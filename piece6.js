@@ -62,9 +62,9 @@ class Piece6 extends Piece {
 
         switch (this.rotateStatus) {
             case 0:
-                return { x: firstX, y: firstY - 2 };
+                return { x: firstX, y: firstY + 2 };
             case 1:
-                return { x: firstX + 1, y: firstY };
+                return { x: firstX + 1, y: firstY - 1 };
         }
 
     }
