@@ -310,7 +310,12 @@ class Tetris {
 
             //Repõe com linhas vazias
             while (this.grid.length < this.gridY) {
-                this.grid = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], ...this.grid];
+                const newRow = [];
+                for (let i = 0; i < this.gridX; i++) {
+                    newRow.push(0);
+                }
+
+                this.grid = [newRow, ...this.grid];
             }
 
             if (this.level < this.maxLevel) {
@@ -398,20 +403,14 @@ class Tetris {
         this.context.drawImage(cell, posX, posY, this.cellSize, this.cellSize);
     }
 
-    drawClickAnywhere() {
-        this.context.fillStyle = "rgb(19, 26, 18)";
-        this.context.font = this.width * 0.06 + "px retro-gaming";
-        this.context.fillText("Click anywhere to", this.width * 0.1, this.height * 0.275);
-        this.context.fillText("start or restart.", this.width * 0.112, this.height * 0.35)
-    }
-
     drawWelcome() {
 
         this.context.fillStyle = "rgb(19, 26, 18)";
         this.context.font = this.width * 0.13 + "px retro-gaming";
         this.context.fillText("Tetris", this.width * 0.15, this.height * 0.2);
 
-        this.drawClickAnywhere();
+        this.context.font = this.width * 0.06 + "px retro-gaming";
+        this.context.fillText("Press start.", this.width * 0.18, this.height * 0.4)
 
         this.drawHowToPlay();
 
@@ -422,7 +421,9 @@ class Tetris {
         this.context.font = this.width * 0.11 + "px retro-gaming";
         this.context.fillText("Game Over!", this.width * 0.085, this.height * 0.2);
 
-        this.drawClickAnywhere()
+        this.context.font = this.width * 0.06 + "px retro-gaming";
+        this.context.fillText("Press start", this.width * 0.19, this.height * 0.35)
+        this.context.fillText("or restart.", this.width * 0.2, this.height * 0.42)
 
         this.drawHowToPlay();
     }
@@ -571,11 +572,11 @@ class Tetris {
     }
 
     pressLeft() {
-        this.move(1, 0);
+        this.move(-1, 0);
     }
 
     pressRight() {
-        this.move(-1, 0);
+        this.move(1, 0);
     }
 
     pressSpace() {
@@ -586,12 +587,12 @@ class Tetris {
     mapKeys() {
         document.body.addEventListener('keyup', ({ key }) => {
             switch (key) {
-                case 'a':
-                case 'A':
-                    this.pressRight();
-                    break;
                 case 'd':
                 case 'D':
+                    this.pressRight();
+                    break;
+                case 'a':
+                case 'A':
                     this.pressLeft();
                     break;
                 case 'w':

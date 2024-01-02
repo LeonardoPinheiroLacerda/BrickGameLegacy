@@ -72,62 +72,56 @@ class BrickGameBody {
         this.tetris.body.append(controlContainer);
 
         //Buttons
-        const upButton = document.createElement("button");
-        upButton.classList.add("btn");
-        upButton.classList.add("direction-btn");
-        upButton.classList.add("up-btn");
-        upButton.addEventListener("click", this.onUp);
-        controlContainer.append(upButton);
+        const buttonContainer = (controlContainer, containerClass, labelText, btnClass, onClick) => {
+            const container = document.createElement("div");
+            container.classList.add(containerClass);
+            controlContainer.append(container);
 
-        const downButton = document.createElement("button");
-        downButton.classList.add("btn");
-        downButton.classList.add("direction-btn");
-        downButton.classList.add("down-btn");
-        downButton.addEventListener("click", this.onDown);
-        controlContainer.append(downButton);
+            const label = document.createElement("label");
+            label.innerHTML = labelText;
+            container.append(label);
 
-        const LeftButton = document.createElement("button");
-        LeftButton.classList.add("btn");
-        LeftButton.classList.add("direction-btn");
-        LeftButton.classList.add("left-btn");
-        LeftButton.addEventListener("click", this.onRight);
-        controlContainer.append(LeftButton);
+            const button = document.createElement("button");
+            button.classList.add(btnClass);
 
-        const rightButton = document.createElement("button");
-        rightButton.classList.add("btn");
-        rightButton.classList.add("direction-btn");
-        rightButton.classList.add("right-btn");
-        rightButton.addEventListener("click", this.onLeft);
-        controlContainer.append(rightButton);
+            button.addEventListener("click", () => {
+                // navigator.vibrate(200);
+                onClick();
+            });
 
-        const actionButton = document.createElement("button");
-        actionButton.classList.add("lg-btn");
-        actionButton.addEventListener("click", this.onAction);
-        controlContainer.append(actionButton);
+            let holdTimer;
+            let delayTimer;
 
-        const onOffButton = document.createElement("button");
-        onOffButton.classList.add("sm-btn");
-        onOffButton.classList.add("on-off-btn");
-        onOffButton.addEventListener("click", this.onOnOff);
-        controlContainer.append(onOffButton);
+            button.addEventListener("touchstart", () => {
+                // navigator.vibrate(200);
 
-        const startButton = document.createElement("button");
-        startButton.classList.add("sm-btn");
-        startButton.classList.add("start-btn");
-        startButton.addEventListener("click", this.onStart);
-        controlContainer.append(startButton);
+                delayTimer = setTimeout(() => {
+                    holdTimer = setInterval(() => {
+                        onClick();
+                    }, 50);
+                }, 250);
 
-        const soundButton = document.createElement("button");
-        soundButton.classList.add("sm-btn");
-        soundButton.classList.add("sound-btn");
-        soundButton.addEventListener("click", this.onSound);
-        controlContainer.append(soundButton);
+            });
 
-        const resetButton = document.createElement("button");
-        resetButton.classList.add("sm-btn");
-        resetButton.classList.add("reset-btn");
-        resetButton.addEventListener("click", this.onReset);
-        controlContainer.append(resetButton);
+            button.addEventListener("touchend", () => {
+                clearTimeout(delayTimer);
+                clearInterval(holdTimer);
+            });
+
+            container.append(button);
+        }
+
+        buttonContainer(controlContainer, "up-btn-container", "W", "btn", this.onUp);
+        buttonContainer(controlContainer, "down-btn-container", "S", "btn", this.onDown);
+        buttonContainer(controlContainer, "right-btn-container", "D", "btn", this.onRight);
+        buttonContainer(controlContainer, "left-btn-container", "A", "btn", this.onLeft);
+
+        buttonContainer(controlContainer, 'action-btn-container', 'SPACE', "lg-btn", this.onAction)
+
+        buttonContainer(controlContainer, 'on-off-btn-container', "ON OFF", "sm-btn", this.onOnOff);
+        buttonContainer(controlContainer, 'start-pause-btn-container', "START PAUSE", "sm-btn", this.onStart);
+        buttonContainer(controlContainer, 'sound-btn-container', "SOUND", "sm-btn", this.onSound);
+        buttonContainer(controlContainer, 'reset-btn-container', "RESET", "sm-btn", this.onReset);
 
     }
 }

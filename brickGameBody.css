@@ -11,7 +11,8 @@
 
     box-shadow:
         calc(var(--width) * -0.03) calc(var(--width) * 0.03) var(--dispersion) black,
-        calc(var(--width) * -0.02) calc(var(--width) * 0.02) var(--dispersion) var(--color-shadow-reflexion) inset;
+        calc(var(--width) * -0.02) calc(var(--width) * 0.02) var(--dispersion) var(--color-shadow-reflexion) inset,
+        calc(var(--width) * 0.01) calc(var(--width) * -0.01) var(--dispersion) var(--color-shadow) inset;
 }
 
 .brick-game-body .frame {
@@ -51,7 +52,9 @@
     position: relative;
 }
 
-.brick-game-body>.controls-container>.btn {
+
+/* Buttons */
+.brick-game-body>.controls-container .btn {
 
     transition-property: transform, box-shadow;
     transition-duration: .15s;
@@ -71,102 +74,12 @@
 
 }
 
-.brick-game-body>.controls-container>.btn:active {
+.brick-game-body>.controls-container .btn:active {
     box-shadow: 0px 0px var(--color-shadow);
     transform: translateX(calc(var(--width) * -0.005)) translateY(calc(var(--width) * 0.005));
 }
 
-.brick-game-body>.controls-container>.direction-btn.up-btn {
-    background-image: url('./assets/images/triangleUp.svg');
-    background-size: contain;
-
-    position: absolute;
-    top: calc(var(--width) * 0.3);
-    left: calc(var(--width) * 0.15);
-}
-
-.brick-game-body>.controls-container>.direction-btn.down-btn {
-    background-image: url('./assets/images/triangleDown.svg');
-    background-size: contain;
-
-    position: absolute;
-    top: calc(var(--width) * 0.6);
-    left: calc(var(--width) * 0.15);
-}
-
-.brick-game-body>.controls-container>.direction-btn.right-btn {
-    background-image: url('./assets/images/triangleRight.svg');
-    background-size: contain;
-
-
-    position: absolute;
-    top: calc(var(--width) * 0.45);
-    left: calc(var(--width) * 0.3);
-}
-
-.brick-game-body>.controls-container>.direction-btn.left-btn {
-    background-image: url('./assets/images/triangleLeft.svg');
-    background-size: contain;
-
-    position: absolute;
-    top: calc(var(--width) * 0.45);
-    left: calc(var(--width) * 0);
-}
-
-.brick-game-body>.controls-container>.direction-btn.up-btn::after {
-    content: 'W';
-    font-family: 'retro-gaming';
-    font-size: calc(var(--width) * 0.06);
-    color: white;
-
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    left: 0%;
-    top: -60%;
-}
-
-.brick-game-body>.controls-container>.direction-btn.down-btn::after {
-    content: 'S';
-    font-family: 'retro-gaming';
-    font-size: calc(var(--width) * 0.06);
-    color: white;
-
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    left: 0%;
-    top: -60%;
-}
-
-.brick-game-body>.controls-container>.direction-btn.right-btn::after {
-    content: 'D';
-    font-family: 'retro-gaming';
-    font-size: calc(var(--width) * 0.06);
-    color: white;
-
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    left: 0%;
-    top: -60%;
-}
-
-.brick-game-body>.controls-container>.direction-btn.left-btn::after {
-    content: 'A';
-    font-family: 'retro-gaming';
-    font-size: calc(var(--width) * 0.06);
-    color: white;
-
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    left: 0%;
-    top: -60%;
-}
-
-
-.brick-game-body>.controls-container>.lg-btn {
+.brick-game-body>.controls-container .lg-btn {
 
     transition-property: transform, box-shadow;
     transition-duration: .15s;
@@ -184,36 +97,17 @@
         calc(var(--width) * -0.015) calc(var(--width) * 0.015) var(--dispersion) var(--color-shadow),
         calc(var(--width) * -0.0125) calc(var(--width) * 0.0125) var(--dispersion) var(--button-color-reflexion) inset;
 
-
-    position: absolute;
-    top: calc(var(--width) * 0.4);
-    right: calc(var(--width) * 0.1);
-
     background-image: url('./assets/images/cross.svg');
     background-size: contain;
 }
 
-.brick-game-body>.controls-container>.lg-btn:active {
+.brick-game-body>.controls-container .lg-btn:active {
 
     box-shadow: 0px 0px var(--color-shadow);
     transform: translateX(calc(var(--width) * -0.0075)) translateY(calc(var(--width) * 0.0075));
 }
 
-.brick-game-body>.controls-container>.lg-btn::after {
-    content: 'SPACE';
-    font-family: 'retro-gaming';
-    font-size: calc(var(--width) * 0.06);
-    color: white;
-
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    left: 0%;
-    top: -40%;
-}
-
-
-.brick-game-body>.controls-container>.sm-btn {
+.brick-game-body>.controls-container .sm-btn {
 
     transition-property: transform, box-shadow;
     transition-duration: .15s;
@@ -232,87 +126,129 @@
         calc(var(--width) * -0.0075) calc(var(--width) * 0.0075) var(--dispersion) var(--button-color-reflexion) inset;
 }
 
-.brick-game-body>.controls-container>.sm-btn:active {
+.brick-game-body>.controls-container .sm-btn:active {
     box-shadow: 0px 0px var(--color-shadow);
     transform: translateX(calc(var(--width) * -0.0025)) translateY(calc(var(--width) * 0.0025));
 }
 
-.brick-game-body>.controls-container>.sm-btn.on-off-btn {
-    position: absolute;
-    top: calc(var(--width) * 0.05);
-    right: calc(var(--width) * 0.65);
+/* Button containers */
+
+.brick-game-body>.controls-container>div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--height) * 0.03);
 }
 
-.brick-game-body>.controls-container>.sm-btn.on-off-btn::after {
-    content: 'On/Off';
-    font-family: 'retro-gaming';
-    font-size: calc(var(--width) * 0.05);
+.brick-game-body>.controls-container>div>label {
     color: white;
-
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    left: -40%;
-    top: -100%;
-}
-
-.brick-game-body>.controls-container>.sm-btn.start-btn {
-    position: absolute;
-    top: calc(var(--width) * 0.05);
-    right: calc(var(--width) * 0.45);
-}
-
-.brick-game-body>.controls-container>.sm-btn.start-btn::after {
-    content: 'Start Pause';
     font-family: 'retro-gaming';
-    font-size: calc(var(--width) * 0.05);
-    color: white;
-
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    left: -40%;
-    top: -175%;
+    font-size: calc(var(--width) * 0.06);
 }
 
-.brick-game-body>.controls-container>.sm-btn.sound-btn {
-    position: absolute;
-    top: calc(var(--width) * 0.05);
-    right: calc(var(--width) * 0.25);
+
+/* Up button */
+.brick-game-body>.controls-container>.up-btn-container>button {
+    background-image: url('./assets/images/triangleUp.svg');
+    background-size: contain;
 }
 
-.brick-game-body>.controls-container>.sm-btn.sound-btn::after {
-    content: 'Sound';
-    font-family: 'retro-gaming';
-    font-size: calc(var(--width) * 0.05);
-    color: white;
-
+.brick-game-body>.controls-container .up-btn-container {
     position: absolute;
-    height: 100%;
-    width: 100%;
-    left: -40%;
-    top: -100%;
+    top: calc(var(--width) * 0.24);
+    left: calc(var(--width) * 0.15);
 }
 
-.brick-game-body>.controls-container>.sm-btn.reset-btn {
-    position: absolute;
-    top: calc(var(--width) * 0.05);
-    right: calc(var(--width) * 0.05);
+
+/* Down button */
+.brick-game-body>.controls-container>.down-btn-container>button {
+    background-image: url('./assets/images/triangleDown.svg');
+    background-size: contain;
 }
 
-.brick-game-body>.controls-container>.sm-btn.reset-btn::after {
-    content: 'Reset';
-    font-family: 'retro-gaming';
-    font-size: calc(var(--width) * 0.05);
-    color: white;
 
+.brick-game-body>.controls-container>.down-btn-container {
     position: absolute;
-    height: 100%;
-    width: 100%;
-    left: -40%;
-    top: -100%;
+    top: calc(var(--width) * 0.54);
+    left: calc(var(--width) * 0.15);
 }
 
+/* Right button */
+.brick-game-body>.controls-container>.right-btn-container {
+    position: absolute;
+    top: calc(var(--width) * 0.39);
+    left: calc(var(--width) * 0.3);
+}
+
+.brick-game-body>.controls-container>.right-btn-container>button {
+    background-image: url('./assets/images/triangleRight.svg');
+    background-size: contain;
+}
+
+/* Left button */
+
+.brick-game-body>.controls-container>.left-btn-container>button {
+    background-image: url('./assets/images/triangleLeft.svg');
+    background-size: contain;
+}
+
+.brick-game-body>.controls-container>.left-btn-container {
+    position: absolute;
+    top: calc(var(--width) * 0.39);
+    left: calc(var(--width) * 0);
+}
+
+/* Action button */
+.brick-game-body>.controls-container>.action-btn-container {
+    position: absolute;
+    top: calc(var(--width) * 0.32);
+    right: calc(var(--width) * 0.1);
+}
+
+/* Small Buttons */
+
+.on-off-btn-container,
+.start-pause-btn-container,
+.sound-btn-container,
+.reset-btn-container {
+    flex-direction: column-reverse !important;
+    position: absolute;
+    /* top: calc(var(--width) * 0); */
+    width: calc(var(--width) * 0.22);
+}
+
+.on-off-btn-container>label,
+.start-pause-btn-container>label,
+.sound-btn-container>label,
+.reset-btn-container>label {
+    font-size: calc(var(--width) * 0.04) !important;
+}
+
+/* On Off Button */
+
+.brick-game-body>.controls-container>.on-off-btn-container {
+    right: calc(var(--width) * 0.69);
+}
+
+/* Start Pause Button */
+
+.brick-game-body>.controls-container>.start-pause-btn-container {
+    right: calc(var(--width) * 0.47);
+}
+
+/* Sound Button */
+
+.brick-game-body>.controls-container>.sound-btn-container {
+    right: calc(var(--width) * 0.22);
+}
+
+/* Reset Button */
+
+.brick-game-body>.controls-container>.reset-btn-container {
+    right: calc(var(--width) * 0);
+}
+
+/* Canvas */
 
 .brick-game-body canvas {
     position: relative;
