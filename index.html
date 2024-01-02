@@ -30,6 +30,8 @@
 
     <script src="brickGameBody.js"></script>
     <script src="utils.js"></script>
+
+    <script src="game.js"></script>
     <script src="piece.js"></script>
     <script src="piece1.js"></script>
     <script src="piece2.js"></script>
@@ -45,10 +47,8 @@
 
         if (screen.width < 640 || screen.height < 480) {
             tetris = new Tetris(document.body.clientWidth * 0.7, "#brick-game", true);
-            // tetris.init();
         } else {
             tetris = new Tetris(420, "#brick-game", true);
-            tetris.init();
         }
 
 

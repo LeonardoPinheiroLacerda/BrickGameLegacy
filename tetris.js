@@ -1,98 +1,11 @@
-class Tetris {
+class Tetris extends Game {
 
     constructor(width = 480, containerSelector = '#brick-game') {
 
-        //Grid
-        this.gridX = 11;
-        this.gridY = 18;
-        this.grid = [];
-
-        //Dimensions
-        this.width = width;
-
-        this.hudWidth = this.width * 0.4;
-
-        this.gameDisplayWidth = this.width - this.hudWidth;
-        this.gameDisplayMargin = this.width * 0.04;
-
-        this.cellMargin = this.width * 0.005;
-        this.cellSize = this.gameDisplayWidth / this.gridX - this.cellMargin - (this.cellMargin / this.gridX);
-
-        this.height = this.cellSize * this.gridY + (this.cellMargin * (this.gridY + 1)) + (this.gameDisplayMargin * 2);
-
-        //Pieces
-        this.actualPieceId = 1;
-
-        this.nextPiece = this.getNextPiece();
-
-        this.actualPiece;
-
-        //Speed
-        this.maxMoveInterval = 20;
-
-        this.moveInterval = this.maxMoveInterval;
-        this.frameCount = this.maxMoveInterval;
-
-
-        //Score and level
-        this.score = 0;
-
-        this.level = 1;
-        this.maxLevel = 10;
-
-        this.lines = 0;
-        this.linesToLevelUp = 3;
-
-
-        //Canvas
-        this.canvas = document.createElement("canvas");
-        this.body = document.querySelector(containerSelector);
-
-        this.body.append(this.canvas);
-
-        /** @type{CanvasRenderingContext2D} */
-        this.context = this.canvas.getContext('2d');
-
-        //Correção de escala para telas com dpi maior
-        this.canvas.style.width = `${this.width}px`
-        this.canvas.style.height = `${this.height}px`
-
-        this.scale = Math.ceil(window.devicePixelRatio);
-
-        this.canvas.width = Math.floor(this.width * this.scale);
-        this.canvas.height = Math.floor(this.height * this.scale);
-
-
-        //Carregando recursos e inicializando tela desligada
-        this.inactiveCell = new Image();
-        this.inactiveCell.src = "./assets/images/inactiveCell.svg";
-
-        this.activeCell = new Image();
-        this.activeCell.src = "./assets/images/activeCell.svg";
-
-        this.inactiveCell.onload = () => {
-
-            this.turnOff();
-            this.mapKeys();
-
-            const font = new FontFace(
-                "retro-gaming",
-                "url(./assets/fonts/digital-7.monoitalic.ttf)"
-            );
-            font.load().then(() => {
-                document.fonts.add(font);
-            });
-
-        }
-
-        //States
-        this.isOn = false;
-        this.isStart = false;
-        this.isGameOver = false;
-
-        //Corpo do console e configurando botoes
-        const body = new BrickGameBody(
-            this,
+        super(
+            width,
+            containerSelector,
+            "tetrisHiScore",
             {
                 onOnOff: () => {
                     if (this.isOn) {
@@ -134,9 +47,15 @@ class Tetris {
                     this.pressLeft();
                 },
             }
-
         );
-        body.create();
+
+        //Pieces
+        this.actualPieceId = 1;
+        this.nextPiece = this.getNextPiece();
+        this.actualPiece;
+
+        this.lines = 0;
+        this.linesToLevelUp = 3;
 
     }
 
@@ -256,25 +175,9 @@ class Tetris {
         }
     }
 
-    //Canvas drawing
-    scaleCanvas() {
-        this.context.reset();
-        this.context.scale(this.scale, this.scale);
-    }
-
     drawData() {
-        this.context.font = this.width * 0.06 + "px retro-gaming"
-        this.context.fillStyle = "rgb(19, 26, 18)";
 
-        this.context.fillText("Score", this.width * 0.7, this.height * 0.1);
-        this.context.fillText(this.score, this.width * 0.7, this.height * 0.15);
-
-        const hiScore = !localStorage.getItem("hiscore")
-            ? 0
-            : parseInt(localStorage.getItem("hiscore"));
-
-        this.context.fillText("Hi-Score", this.width * 0.7, this.height * 0.23);
-        this.context.fillText(hiScore, this.width * 0.7, this.height * 0.28);
+        super.drawData();
 
         if (this.nextPiece) {
             const preview = this.nextPiece.getPreviewParts();
@@ -292,43 +195,6 @@ class Tetris {
             }
         }
 
-        this.context.fillText("Level", this.width * 0.7, this.height * 0.88);
-        this.context.fillText(`${this.level} - ${this.maxLevel}`, this.width * 0.7, this.height * 0.93);
-    }
-
-    drawFrame() {
-        this.context.rect(0, 0, this.width, this.height);
-        this.context.fillStyle = '#adbeac';
-        this.context.fill();
-
-        this.context.lineWidth = this.width * 0.02;
-        this.context.strokeStyle = "rgb(19, 26, 18)";
-        this.context.stroke();
-
-        this.context.lineWidth = this.width * 0.005;
-        this.context.rect(this.gameDisplayMargin, this.gameDisplayMargin, this.gameDisplayWidth, this.height - this.gameDisplayMargin * 2);
-        this.context.stroke();
-
-
-        for (let y = 0; y < this.gridY; y++) {
-            for (let x = 0; x < this.gridX; x++) {
-
-                const isActive = this.grid[y][x] !== 0;
-
-                const posX = this.gameDisplayMargin + this.cellMargin + (x * this.cellSize) + (x * this.cellMargin);
-                const posY = this.gameDisplayMargin + this.cellMargin + (y * this.cellSize) + (y * this.cellMargin);
-
-                this.drawCell(isActive, posX, posY);
-            }
-        }
-    }
-
-    drawCell(isActive, posX, posY) {
-        const cell = isActive
-            ? this.activeCell
-            : this.inactiveCell
-
-        this.context.drawImage(cell, posX, posY, this.cellSize, this.cellSize);
     }
 
     drawWelcome() {
@@ -341,10 +207,10 @@ class Tetris {
         this.context.fillText("Press start.", this.width * 0.18, this.height * 0.4)
 
         this.drawHowToPlay();
-
     }
 
     drawGameOver() {
+
         this.context.fillStyle = "rgb(19, 26, 18)";
         this.context.font = this.width * 0.11 + "px retro-gaming";
         this.context.fillText("Game Over!", this.width * 0.085, this.height * 0.2);
@@ -371,120 +237,68 @@ class Tetris {
 
 
     //States
-    resetGrid() {
-        this.grid = (() => {
-            const grid = [];
-            for (let y = 0; y < this.gridY; y++) {
-                grid.push([]);
-                for (let x = 0; x < this.gridX; x++) {
-                    grid[y][x] = 0;
-                }
-            }
-            return grid;
-        })()
-    }
-
     gameOver() {
-
-        clearInterval(this.interval);
-
+        this.lines = 0;
         this.nextPiece = null;
 
-        this.scaleCanvas();
-        this.resetGrid();
-        this.drawFrame();
-        this.drawData();
-
-        const actualHighScore = parseInt(localStorage.getItem("hiscore"));
-
-        if (actualHighScore < this.score) {
-            localStorage.setItem("hiscore", this.score);
-        }
-
-        this.lines = 0;
-        this.score = 0;
-        this.level = 1;
-
-        this.drawGameOver();
+        super.gameOver();
     }
 
     //Actions
     turnOn() {
-        this.isOn = true;
-
-        this.scaleCanvas();
-
-        this.resetGrid();
-        this.score = 0;
         this.lines = 0;
-        this.level = 1;
 
-        this.drawFrame();
-        this.drawWelcome();
+        super.turnOn();
     }
 
     turnOff() {
-        this.isOn = false;
-        this.pause();
+        this.actualPieceId = 1;
+        this.nextPiece = this.getNextPiece();
+        this.actualPiece = null;
 
-        this.scaleCanvas();
-
-        this.resetGrid();
-        this.score = 0;
         this.lines = 0;
-        this.level = 1;
 
-        this.drawFrame();
+        super.turnOff();
     }
 
     reset() {
+        this.actualPieceId = 1;
+        this.nextPiece = this.getNextPiece();
+        this.actualPiece = null;
+
         this.lines = 0;
-        this.score = 0;
-        this.level = 1;
 
-        this.resetGrid();
-
-        this.start();
+        super.reset();
     }
 
     start() {
-        this.isStart = true;
-
         new Audio('./assets/sounds/start.wav')
             .play();
 
-        clearInterval(this.interval);
-        this.interval = setInterval(() => {
+        super.start(
 
-            this.scaleCanvas();
-
-            this.drawFrame();
-            this.drawData();
-
-            if (this.moveInterval === 1 && this.frameCount % 2 === 0) {
-                new Audio('./assets/sounds/move.wav')
-                    .play();
-            } else {
-                this.moveInterval = this.maxMoveInterval - this.level;
-            }
-
-            this.frameCount += 1;
-            if (this.frameCount % this.moveInterval === 0) {
-
+            //Next
+            () => {
                 if (this.actualPiece == null || !this.actualPiece.move(0, 1, this.grid, this.actualPieceId)) {
                     this.checkScore();
                     this.spawn();
                 }
+            },
 
+            //BeforeNext
+            () => {
+                if (this.moveInterval === 1 && this.frameCount % 2 === 0) {
+                    new Audio('./assets/sounds/move.wav')
+                        .play();
+                } else {
+                    this.moveInterval = this.maxMoveInterval - this.level;
+                }
             }
-
-        }, 1000 / 30);
+        );
     }
 
     pause() {
-        this.isStart = false;
-
-        clearInterval(this.interval);
+        super.pause();
     }
 
     sound() {
@@ -542,6 +356,5 @@ class Tetris {
             }
         })
     }
-
 
 }
