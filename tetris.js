@@ -169,27 +169,39 @@ class Tetris {
         let actualId = this.actualPiece?.id;
         let nextId = null;
 
+        let piece;
         do {
-            switch (getRandomInt(1, 10)) {
+
+            const randomNumber = getRandomInt(1, 9);
+
+            switch (randomNumber) {
                 case 1:
-                    return new Piece1(this.gridX);
+                    piece = new Piece1(this.gridX);
+                    break;
                 case 2:
-                    return new Piece2(this.gridX);
+                    piece = new Piece2(this.gridX);
+                    break;
                 case 3:
-                    return new Piece3(this.gridX);
+                    piece = new Piece3(this.gridX);
+                    break;
                 case 4:
-                    return new Piece4(this.gridX);
+                    piece = new Piece4(this.gridX);
+                    break;
                 case 5:
-                    return new Piece5(this.gridX);
+                    piece = new Piece5(this.gridX);
+                    break;
                 case 6:
-                    return new Piece6(this.gridX);
+                    piece = new Piece6(this.gridX);
+                    break;
                 case 7:
-                    return new Piece7(this.gridX);
+                    piece = new Piece7(this.gridX);
+                    break;
             }
-            nextId = this.piece?.id;
+            nextId = piece?.id;
 
+        } while (actualId === nextId || nextId == undefined);
 
-        } while (actualId === nextId && nextId !== null);
+        return piece;
     }
 
     checkScore() {
