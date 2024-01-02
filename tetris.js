@@ -28,7 +28,7 @@ class Tetris extends Game {
                 },
                 onAction: () => {
                     if (!this.isStart) return;
-                    this.pressSpace();
+                    this.pressAction();
                 },
                 onUp: () => {
                     if (!this.isStart) return;
@@ -228,7 +228,7 @@ class Tetris extends Game {
         this.context.fillText("How to play?", this.width * 0.1, this.height * 0.62)
 
         this.context.font = this.width * 0.05 + "px retro-gaming";
-        this.context.fillText("W/Space: rotate", this.width * 0.09, this.height * 0.7);
+        this.context.fillText("W/Action: rotate", this.width * 0.09, this.height * 0.7);
         this.context.fillText("A: move left", this.width * 0.09, this.height * 0.76);
         this.context.fillText("S: move down faster", this.width * 0.09, this.height * 0.82);
         this.context.fillText("D: move right", this.width * 0.09, this.height * 0.88);
@@ -306,6 +306,8 @@ class Tetris extends Game {
     }
 
     pressUp() {
+        new Audio('./assets/sounds/turn.wav')
+            .play();
         this.actualPiece.rotate(this.grid, this.actualPieceId);
     }
 
@@ -321,7 +323,9 @@ class Tetris extends Game {
         this.actualPiece.move(1, 0, this.grid, this.actualPieceId);
     }
 
-    pressSpace() {
+    pressAction() {
+        new Audio('./assets/sounds/turn.wav')
+            .play();
         this.actualPiece.rotate(this.grid, this.actualPieceId);
     }
 
@@ -341,8 +345,9 @@ class Tetris extends Game {
                 case 'W':
                     this.pressUp();
                     break;
-                case ' ':
-                    this.pressSpace();
+                case 'j':
+                case 'J':
+                    this.pressAction();
                     break;
             }
         })

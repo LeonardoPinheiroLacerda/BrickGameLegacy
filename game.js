@@ -10,7 +10,7 @@ class Game {
      * - pressDown
      * - pressLeft
      * - pressRight
-     * - pressSpace
+     * - pressAction
      */
     constructor(width, containerSelector, hiScoreKey, events) {
 
@@ -60,10 +60,10 @@ class Game {
 
         //Carregando recursos e inicializando tela desligada
         this.inactiveCell = new Image();
-        this.inactiveCell.src = "./assets/images/inactiveCellHigh.svg";
+        this.inactiveCell.src = "./assets/images/inactiveCell.svg";
 
         this.activeCell = new Image();
-        this.activeCell.src = "./assets/images/activeCellHigh.svg";
+        this.activeCell.src = "./assets/images/activeCell.svg";
 
         this.inactiveCell.onload = () => {
 
@@ -107,7 +107,7 @@ class Game {
 
         const actualHighScore = parseInt(localStorage.getItem(this.hiScoreKey));
 
-        if (actualHighScore < this.score) {
+        if (actualHighScore < this.score || !actualHighScore) {
             localStorage.setItem(this.hiScoreKey, this.score);
         }
 
@@ -164,18 +164,29 @@ class Game {
         this.context.rect(this.gameDisplayMargin, this.gameDisplayMargin, this.gameDisplayWidth, this.height - this.gameDisplayMargin * 2);
         this.context.stroke();
 
+        const rowPromises = [];
+
+        const promise = (y) => {
+            return new Promise(
+                () => {
+                    for (let x = 0; x < this.gridX; x++) {
+
+                        const isActive = this.grid[y][x] !== 0;
+
+                        const posX = this.gameDisplayMargin + this.cellMargin + (x * this.cellSize) + (x * this.cellMargin);
+                        const posY = this.gameDisplayMargin + this.cellMargin + (y * this.cellSize) + (y * this.cellMargin);
+
+                        this.drawCell(isActive, posX, posY);
+                    }
+                }
+            );
+        }
 
         for (let y = 0; y < this.gridY; y++) {
-            for (let x = 0; x < this.gridX; x++) {
-
-                const isActive = this.grid[y][x] !== 0;
-
-                const posX = this.gameDisplayMargin + this.cellMargin + (x * this.cellSize) + (x * this.cellMargin);
-                const posY = this.gameDisplayMargin + this.cellMargin + (y * this.cellSize) + (y * this.cellMargin);
-
-                this.drawCell(isActive, posX, posY);
-            }
+            rowPromises.push(promise(y));
         }
+
+        Promise.all(rowPromises);
     }
 
     drawWelcome() {
@@ -214,7 +225,7 @@ class Game {
     pressRight() {
     }
 
-    pressSpace() {
+    pressAction() {
     }
 
     //Keys

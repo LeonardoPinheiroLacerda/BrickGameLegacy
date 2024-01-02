@@ -116,7 +116,7 @@ class BrickGameBody {
         buttonContainer(controlContainer, "right-btn-container", "D", "btn", this.onRight);
         buttonContainer(controlContainer, "left-btn-container", "A", "btn", this.onLeft);
 
-        buttonContainer(controlContainer, 'action-btn-container', 'SPACE', "lg-btn", this.onAction)
+        buttonContainer(controlContainer, 'action-btn-container', 'J', "lg-btn", this.onAction)
 
         buttonContainer(controlContainer, 'on-off-btn-container', "ON OFF", "sm-btn", this.onOnOff);
         buttonContainer(controlContainer, 'start-pause-btn-container', "START PAUSE", "sm-btn", this.onStart);
