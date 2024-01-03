@@ -277,12 +277,18 @@ class Game {
         this.score = 0;
         this.level = 1;
 
+        this.isGameOver = false;
+
         this.resetGrid();
 
         this.start();
     }
 
     start(next = () => { console.log('next') }, beforeNext = () => { }) {
+
+        if (this.isGameOver) {
+            this.isGameOver = false;
+        }
 
         this.isStart = true;
 

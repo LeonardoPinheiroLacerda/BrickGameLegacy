@@ -302,7 +302,11 @@ class Tetris extends Game {
     }
 
     pause() {
-        super.pause();
+        if (this.isGameOver) {
+            this.start();
+        } else {
+            super.pause();
+        }
     }
 
     sound() {
