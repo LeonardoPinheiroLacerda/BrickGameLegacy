@@ -79,9 +79,9 @@ class Game {
                 document.fonts.add(font);
             });
 
-            this.drawFrame();
 
-            new BrickGameBody(this, events).create();
+            new gameBrickBody(this, events).create();
+            this.drawFrame();
         }
 
         //States

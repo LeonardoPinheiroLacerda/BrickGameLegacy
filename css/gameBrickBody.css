@@ -97,7 +97,7 @@
         calc(var(--width) * -0.015) calc(var(--width) * 0.015) var(--dispersion) var(--color-shadow),
         calc(var(--width) * -0.0125) calc(var(--width) * 0.0125) var(--dispersion) var(--button-color-reflexion) inset;
 
-    background-image: url('./assets/images/cross.svg');
+    background-image: url('./../assets/images/cross.svg');
     background-size: contain;
 }
 
@@ -150,7 +150,7 @@
 
 /* Up button */
 .brick-game-body>.controls-container>.up-btn-container>button {
-    background-image: url('./assets/images/triangleUp.svg');
+    background-image: url('./../assets/images/triangleUp.svg');
     background-size: contain;
 }
 
@@ -163,7 +163,7 @@
 
 /* Down button */
 .brick-game-body>.controls-container>.down-btn-container>button {
-    background-image: url('./assets/images/triangleDown.svg');
+    background-image: url('./../assets/images/triangleDown.svg');
     background-size: contain;
 }
 
@@ -182,14 +182,14 @@
 }
 
 .brick-game-body>.controls-container>.right-btn-container>button {
-    background-image: url('./assets/images/triangleRight.svg');
+    background-image: url('./../assets/images/triangleRight.svg');
     background-size: contain;
 }
 
 /* Left button */
 
 .brick-game-body>.controls-container>.left-btn-container>button {
-    background-image: url('./assets/images/triangleLeft.svg');
+    background-image: url('./../assets/images/triangleLeft.svg');
     background-size: contain;
 }
 
