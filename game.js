@@ -35,10 +35,10 @@ class Game {
         this.height = this.cellSize * this.gridY + (this.cellMargin * (this.gridY + 1)) + (this.gameDisplayMargin * 2);
 
         //Speed
-        this.maxMoveInterval = 20;
+        this.initialFrameActionInterval = 20;
 
-        this.moveInterval = this.maxMoveInterval;
-        this.frameCount = this.maxMoveInterval;
+        this.frameActionInterval = this.initialFrameActionInterval;
+        this.frameCount = 0;
 
         //Canvas
         this.canvas = document.createElement("canvas");
@@ -280,7 +280,7 @@ class Game {
             beforeNext();
 
             this.frameCount += 1;
-            if (this.frameCount % this.moveInterval === 0) {
+            if (this.frameCount % this.frameActionInterval === 0) {
                 next();
             }
 

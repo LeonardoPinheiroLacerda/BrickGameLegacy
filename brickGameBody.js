@@ -101,6 +101,8 @@ class BrickGameBody {
                     }, 50);
                 }, 250);
 
+            }, {
+                passive: true
             });
 
             button.addEventListener("touchend", () => {

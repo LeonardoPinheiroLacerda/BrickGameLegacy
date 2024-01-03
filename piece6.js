@@ -7,8 +7,8 @@ class Piece6 extends Piece {
 
         const middleCell = Math.floor(gridX / 2);
 
-        this.rotateStatus = 1;
-        const startCenterCell = { x: middleCell, y: this.rotateStatus === 0 ? 2 : 0 };
+        this.rotateStatus = getRandomInt(0, 2);
+        const startCenterCell = { x: middleCell, y: this.rotateStatus === 0 ? 1 : 0 };
 
         this.parts = this.getParts(startCenterCell, this.rotateStatus);
     }
@@ -19,16 +19,16 @@ class Piece6 extends Piece {
         switch (rotateStatus) {
             case 0:
                 return [
-                    { x, y: y - 1 },
                     { x, y },
+                    { x, y: y - 1 },
                     { x, y: y + 1 },
                     { x, y: y + 2 },
 
                 ]
             case 1:
                 return [
-                    { x: x - 1, y },
                     { x, y },
+                    { x: x - 1, y },
                     { x: x + 1, y },
                     { x: x + 2, y },
                 ]
@@ -62,9 +62,9 @@ class Piece6 extends Piece {
 
         switch (this.rotateStatus) {
             case 0:
-                return { x: firstX, y: firstY + 2 };
+                return { x: firstX, y: firstY };
             case 1:
-                return { x: firstX + 1, y: firstY - 1 };
+                return { x: firstX, y: firstY };
         }
 
     }

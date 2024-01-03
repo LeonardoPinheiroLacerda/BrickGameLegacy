@@ -57,6 +57,8 @@ class Tetris extends Game {
         this.lines = 0;
         this.linesToLevelUp = 3;
 
+        this.isPressingDown = false;
+
     }
 
     spawn() {
@@ -279,7 +281,7 @@ class Tetris extends Game {
 
             //Next
             () => {
-                if (this.actualPiece == null || !this.actualPiece.move(0, 1, this.grid, this.actualPieceId)) {
+                if (this.actualPiece == null || !this.actualPiece?.move(0, 1, this.grid, this.actualPieceId)) {
                     this.checkScore();
                     this.spawn();
                 }
@@ -287,11 +289,16 @@ class Tetris extends Game {
 
             //BeforeNext
             () => {
-                if (this.moveInterval === 1 && this.frameCount % 2 === 0) {
-                    new Audio('./assets/sounds/move.wav')
-                        .play();
+                if (this.isPressingDown) {
+
+                    if (this.frameCount % 2 === 0)
+                        new Audio('./assets/sounds/move.wav')
+                            .play();
+
+                    this.frameActionInterval = 1;
+                    this.isPressingDown = false;
                 } else {
-                    this.moveInterval = this.maxMoveInterval - this.level;
+                    this.frameActionInterval = this.initialFrameActionInterval - this.level;
                 }
             }
         );
@@ -308,25 +315,25 @@ class Tetris extends Game {
     pressUp() {
         new Audio('./assets/sounds/turn.wav')
             .play();
-        this.actualPiece.rotate(this.grid, this.actualPieceId);
+        this.actualPiece?.rotate(this.grid, this.actualPieceId);
     }
 
     pressDown() {
-        this.moveInterval = 1;
+        this.isPressingDown = true
     }
 
     pressLeft() {
-        this.actualPiece.move(-1, 0, this.grid, this.actualPieceId);
+        this.actualPiece?.move(-1, 0, this.grid, this.actualPieceId);
     }
 
     pressRight() {
-        this.actualPiece.move(1, 0, this.grid, this.actualPieceId);
+        this.actualPiece?.move(1, 0, this.grid, this.actualPieceId);
     }
 
     pressAction() {
         new Audio('./assets/sounds/turn.wav')
             .play();
-        this.actualPiece.rotate(this.grid, this.actualPieceId);
+        this.actualPiece?.rotate(this.grid, this.actualPieceId);
     }
 
     //Keys
