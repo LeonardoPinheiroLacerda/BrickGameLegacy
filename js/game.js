@@ -88,6 +88,7 @@ class Game {
         this.isOn = false;
         this.isStart = false;
         this.isGameOver = false;
+        this.isMuted = false;
 
         //Score and level
         this.score = 0;
@@ -145,8 +146,20 @@ class Game {
         this.context.fillText("Hi-Score", this.width * 0.7, this.height * 0.23);
         this.context.fillText(hiScore, this.width * 0.7, this.height * 0.28);
 
-        this.context.fillText("Level", this.width * 0.7, this.height * 0.88);
-        this.context.fillText(`${this.level} - ${this.maxLevel}`, this.width * 0.7, this.height * 0.93);
+        this.context.fillText("Level", this.width * 0.7, this.height * 0.74);
+        this.context.fillText(`${this.level} - ${this.maxLevel}`, this.width * 0.7, this.height * 0.79);
+
+
+        if (this.isStart)
+            this.context.fillStyle = "rgb(166, 183, 165)";
+        this.context.fillText("Paused", this.width * 0.734, this.height * 0.87);
+
+
+        if (!this.isMuted)
+            this.context.fillStyle = "rgb(166, 183, 165)";
+        else
+            this.context.fillStyle = "rgb(19, 26, 18)";
+        this.context.fillText("Muted", this.width * 0.7425, this.height * 0.93);
     }
 
     drawFrame() {
@@ -290,8 +303,11 @@ class Game {
     pause() {
         this.isStart = false;
         clearInterval(this.interval);
+        this.drawData();
     }
 
     sound() {
+        this.isMuted = !this.isMuted;
+        this.drawData();
     }
 }

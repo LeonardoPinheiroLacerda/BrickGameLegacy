@@ -26,6 +26,10 @@ class Tetris extends Game {
                     if (!this.isOn) return;
                     this.reset();
                 },
+                onSound: () => {
+                    if (!this.isOn) return;
+                    this.sound();
+                },
                 onAction: () => {
                     if (!this.isStart) return;
                     this.pressAction();
@@ -309,7 +313,7 @@ class Tetris extends Game {
     }
 
     sound() {
-
+        super.sound();
     }
 
     pressUp() {
