@@ -78,13 +78,9 @@ class Tetris extends Game {
             .some(cell => cell !== 0);
 
         if (!this.isGameOver) {
-            new Audio('./assets/sounds/spawn.wav')
-                .play();
+            this.playSound('./assets/sounds/spawn.wav');
             this.actualPiece.parts.forEach(({ x, y }) => this.grid[y][x] = this.actualPieceId);
         } else {
-            new Audio('./assets/sounds/gameover.wav')
-                .play();
-
             this.gameOver();
         }
 
@@ -141,8 +137,7 @@ class Tetris extends Game {
         }
 
         if (linesCompleted.length > 0) {
-            new Audio('./assets/sounds/score.wav')
-                .play()
+            this.playSound('./assets/sounds/score.wav');
 
             this.lines += linesCompleted.length;
 
@@ -278,8 +273,7 @@ class Tetris extends Game {
     }
 
     start() {
-        new Audio('./assets/sounds/start.wav')
-            .play();
+        this.playSound('./assets/sounds/start.wav');
 
         super.start(
 
@@ -296,8 +290,7 @@ class Tetris extends Game {
                 if (this.isPressingDown) {
 
                     if (this.frameCount % 2 === 0)
-                        new Audio('./assets/sounds/move.wav')
-                            .play();
+                        this.playSound('./assets/sounds/move.wav');
 
                     this.frameActionInterval = 1;
                     this.isPressingDown = false;
@@ -317,8 +310,7 @@ class Tetris extends Game {
     }
 
     pressUp() {
-        new Audio('./assets/sounds/turn.wav')
-            .play();
+        this.playSound('./assets/sounds/turn.wav');
         this.actualPiece?.rotate(this.grid, this.actualPieceId);
     }
 
@@ -327,16 +319,18 @@ class Tetris extends Game {
     }
 
     pressLeft() {
+        this.playSound('./assets/sounds/move.wav');
         this.actualPiece?.move(-1, 0, this.grid, this.actualPieceId);
     }
 
     pressRight() {
+        this.playSound('./assets/sounds/move.wav');
         this.actualPiece?.move(1, 0, this.grid, this.actualPieceId);
     }
 
     pressAction() {
-        new Audio('./assets/sounds/turn.wav')
-            .play();
+        this.playSound('./assets/sounds/turn.wav')
+            ;
         this.actualPiece?.rotate(this.grid, this.actualPieceId);
     }
 

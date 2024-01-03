@@ -116,6 +116,8 @@ class Game {
         this.level = 1;
 
         this.drawGameOver();
+        navigator.vibrate(1500);
+        this.playSound('./assets/sounds/gameover.wav');
     }
 
     //Canvas drawing
@@ -309,5 +311,13 @@ class Game {
     sound() {
         this.isMuted = !this.isMuted;
         this.drawData();
+    }
+
+    playSound(sound) {
+        if (!this.isMuted) {
+            const audio = new Audio(sound);
+            audio.volume = 0.025;
+            audio.play();
+        }
     }
 }

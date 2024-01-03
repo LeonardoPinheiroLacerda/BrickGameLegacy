@@ -88,12 +88,6 @@ class Piece {
             this.parts.forEach(({ x, y }) => {
                 grid[y][x] = pieceId;
             });
-
-
-            if (mx !== 0) {
-                new Audio('./assets/sounds/move.wav')
-                    .play();
-            }
         }
 
         return canMove;
