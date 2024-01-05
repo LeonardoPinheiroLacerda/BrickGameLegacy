@@ -1,10 +1,9 @@
 class Tetris extends Game {
 
-    constructor(width = 480, containerSelector = '#brick-game') {
+    constructor({ width, maxHeight, selector }) {
 
         super(
-            width,
-            containerSelector,
+            { width, maxHeight, selector },
             "tetrisHiScore",
             {
                 onOnOff: () => {
@@ -275,6 +274,8 @@ class Tetris extends Game {
     start() {
         this.playSound('./assets/sounds/start.wav');
 
+        this.nextPiece = this.getNextPiece();
+
         super.start(
 
             //Next
@@ -341,6 +342,8 @@ class Tetris extends Game {
     //Keys
     mapKeys() {
         document.body.addEventListener('keyup', ({ key }) => {
+
+            console.log(key);
             switch (key) {
                 case 'd':
                 case 'D':

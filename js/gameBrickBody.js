@@ -1,4 +1,4 @@
-class gameBrickBody {
+class GameBrickBody {
 
     constructor(tetris, {
         onUp = () => { navigator.vibrate(150); console.log("UP PRESSED") },
@@ -25,7 +25,14 @@ class gameBrickBody {
         this.onReset = onReset;
     }
 
-    setVariables(width, height) {
+    WIDTH_MULTIPLIER = 1.3;
+    HEIGHT_MULTIPLIER = 2.135;
+
+    update(tetris) {
+        this.tetris = tetris;
+    }
+
+    setVariables() {
         const root = document.querySelector(":root");
 
         root.style.setProperty("--color", "rgb(0, 68, 187)");
@@ -34,6 +41,9 @@ class gameBrickBody {
 
         root.style.setProperty("--button-color", 'rgb(247, 222, 57)');
         root.style.setProperty("--button-color-reflexion", "rgb(250, 241, 185)");
+
+        root.style.setProperty("--width-multiplier", this.WIDTH_MULTIPLIER);
+        root.style.setProperty("--height-multiplier", this.HEIGHT_MULTIPLIER);
 
         root.style.setProperty("--dispersion", '3px')
 
@@ -90,7 +100,7 @@ class gameBrickBody {
         //Append css link
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = './css/gameBrickBody.css';
+        link.href = './css/GameBrickBody.css';
 
         link.onload = () => {
 
@@ -112,6 +122,7 @@ class gameBrickBody {
             //Add Controls
             const controlContainer = document.createElement("div");
             controlContainer.classList.add("controls-container");
+
             this.tetris.body.append(controlContainer);
 
             this.buttonContainer(controlContainer, "up-btn-container", "W", "btn", this.onUp);

@@ -12,7 +12,7 @@ class Game {
      * - pressRight
      * - pressAction
      */
-    constructor(width, containerSelector, hiScoreKey, events) {
+    constructor({ width, maxHeight, selector }, hiScoreKey, events) {
 
         this.hiScoreKey = hiScoreKey;
 
@@ -22,17 +22,22 @@ class Game {
         this.grid = [];
 
         //Dimensions
-        this.width = width;
+        let bodyBuilder = new GameBrickBody(this, events);
 
-        this.hudWidth = this.width * 0.4;
+        this.width = width / bodyBuilder.WIDTH_MULTIPLIER
 
-        this.gameDisplayWidth = this.width - this.hudWidth;
-        this.gameDisplayMargin = this.width * 0.04;
+        const calcDimensions = () => {
+            this.hudWidth = this.width * 0.4;
 
-        this.cellMargin = this.width * 0.005;
-        this.cellSize = this.gameDisplayWidth / this.gridX - this.cellMargin - (this.cellMargin / this.gridX);
+            this.gameDisplayWidth = this.width - this.hudWidth;
+            this.gameDisplayMargin = this.width * 0.04;
 
-        this.height = this.cellSize * this.gridY + (this.cellMargin * (this.gridY + 1)) + (this.gameDisplayMargin * 2);
+            this.cellMargin = this.width * 0.0005;
+            this.cellSize = this.gameDisplayWidth / this.gridX - this.cellMargin - (this.cellMargin / this.gridX);
+
+            this.height = this.cellSize * this.gridY + (this.cellMargin * (this.gridY + 1)) + (this.gameDisplayMargin * 2);
+        }
+        calcDimensions();
 
         //Speed
         this.initialFrameActionInterval = 20;
@@ -42,7 +47,7 @@ class Game {
 
         //Canvas
         this.canvas = document.createElement("canvas");
-        this.body = document.querySelector(containerSelector);
+        this.body = document.querySelector(selector);
 
         this.body.append(this.canvas);
 
@@ -50,13 +55,16 @@ class Game {
         this.context = this.canvas.getContext('2d');
 
         //Correção de escala para telas com dpi maior
-        this.canvas.style.width = `${this.width}px`
-        this.canvas.style.height = `${this.height}px`
+        const scaleDisplay = () => {
+            this.canvas.style.width = `${this.width}px`
+            this.canvas.style.height = `${this.height}px`
 
-        this.scale = Math.ceil(window.devicePixelRatio);
+            this.scale = Math.ceil(window.devicePixelRatio);
 
-        this.canvas.width = Math.floor(this.width * this.scale);
-        this.canvas.height = Math.floor(this.height * this.scale);
+            this.canvas.width = Math.floor(this.width * this.scale);
+            this.canvas.height = Math.floor(this.height * this.scale);
+        }
+        scaleDisplay();
 
         //Carregando recursos e inicializando tela desligada
         this.inactiveCell = new Image();
@@ -80,8 +88,35 @@ class Game {
             });
 
 
-            new gameBrickBody(this, events).create();
+
+            //Corrigindo proporções
+            bodyBuilder.update(this);
+
+            const canvasWidth = parseFloat(this.canvas.style.width.replace("px", ""));
+            const canvasHeight = parseFloat(this.canvas.style.height.replace("px", ""));
+
+            const bodyWidth = canvasWidth * bodyBuilder.WIDTH_MULTIPLIER;
+            const bodyHeight = canvasHeight * bodyBuilder.HEIGHT_MULTIPLIER;
+
+            const parentNode = this.body.parentNode;
+
+            if (bodyWidth > parentNode.clientWidth) {
+                this.width = parentNode.clientWidth * 0.7;
+                calcDimensions();
+                scaleDisplay();
+            }
+
+            else if (maxHeight < bodyHeight) {
+                this.width = ((maxHeight * bodyWidth) / bodyHeight) / bodyBuilder.WIDTH_MULTIPLIER;
+                calcDimensions();
+                scaleDisplay();
+            }
+
+
+            //Contruindo body
+            bodyBuilder.create();
             this.drawFrame();
+
         }
 
         //States
@@ -263,7 +298,7 @@ class Game {
 
     turnOff() {
         this.isOn = false;
-        this.pause();
+        clearInterval(this.interval);
 
         this.score = 0;
         this.level = 1;
