@@ -100,7 +100,7 @@ class GameBrickBody {
         //Append css link
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = './css/GameBrickBody.css';
+        link.href = './css/gameBrickBody.css';
 
         link.onload = () => {
 
