@@ -343,7 +343,6 @@ class Tetris extends Game {
     mapKeys() {
         document.body.addEventListener('keyup', ({ key }) => {
 
-            console.log(key);
             switch (key) {
                 case 'd':
                 case 'D':
