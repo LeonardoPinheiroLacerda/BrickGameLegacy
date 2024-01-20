@@ -5,14 +5,16 @@ class Game {
      * - drawWelcome
      * - drawGameOver
      * - drawHowToPlay
-     * - mapKeys
      * - pressUp
+     * - mapKeys
      * - pressDown
      * - pressLeft
      * - pressRight
      * - pressAction
      */
     constructor({ width, maxHeight, selector }, hiScoreKey, events) {
+
+        this.events = events;
 
         this.hiScoreKey = hiScoreKey;
 
@@ -22,22 +24,12 @@ class Game {
         this.grid = [];
 
         //Dimensions
-        let bodyBuilder = new GameBrickBody(this, events);
+        this.bodyBuilder = new GameBrickBody(this);
 
-        this.width = width / bodyBuilder.WIDTH_MULTIPLIER
+        this.width = width / this.bodyBuilder.WIDTH_MULTIPLIER
+        this.maxHeight = maxHeight;
 
-        const calcDimensions = () => {
-            this.hudWidth = this.width * 0.4;
-
-            this.gameDisplayWidth = this.width - this.hudWidth;
-            this.gameDisplayMargin = this.width * 0.04;
-
-            this.cellMargin = this.width * 0.0005;
-            this.cellSize = this.gameDisplayWidth / this.gridX - this.cellMargin - (this.cellMargin / this.gridX);
-
-            this.height = this.cellSize * this.gridY + (this.cellMargin * (this.gridY + 1)) + (this.gameDisplayMargin * 2);
-        }
-        calcDimensions();
+        this.calcDimensions();
 
         //Speed
         this.initialFrameActionInterval = 20;
@@ -47,77 +39,12 @@ class Game {
 
         //Canvas
         this.canvas = document.createElement("canvas");
-        this.body = document.querySelector(selector);
-
-        this.body.append(this.canvas);
 
         /** @type{CanvasRenderingContext2D} */
         this.context = this.canvas.getContext('2d');
 
         //Correção de escala para telas com dpi maior
-        const scaleDisplay = () => {
-            this.canvas.style.width = `${this.width}px`
-            this.canvas.style.height = `${this.height}px`
-
-            this.scale = Math.ceil(window.devicePixelRatio);
-
-            this.canvas.width = Math.floor(this.width * this.scale);
-            this.canvas.height = Math.floor(this.height * this.scale);
-        }
-        scaleDisplay();
-
-        //Carregando recursos e inicializando tela desligada
-        this.inactiveCell = new Image();
-        this.inactiveCell.src = "./assets/images/inactiveCell.svg";
-
-        this.activeCell = new Image();
-        this.activeCell.src = "./assets/images/activeCell.svg";
-
-        this.inactiveCell.onload = () => {
-
-            this.turnOff();
-            this.mapKeys();
-            this.resetGrid();
-
-            const font = new FontFace(
-                "retro-gaming",
-                "url(./assets/fonts/digital-7.monoitalic.ttf)"
-            );
-            font.load().then(() => {
-                document.fonts.add(font);
-            });
-
-
-
-            //Corrigindo proporções
-            bodyBuilder.update(this);
-
-            const canvasWidth = parseFloat(this.canvas.style.width.replace("px", ""));
-            const canvasHeight = parseFloat(this.canvas.style.height.replace("px", ""));
-
-            const bodyWidth = canvasWidth * bodyBuilder.WIDTH_MULTIPLIER;
-            const bodyHeight = canvasHeight * bodyBuilder.HEIGHT_MULTIPLIER;
-
-            const parentNode = this.body.parentNode;
-
-            if (bodyWidth > parentNode.clientWidth) {
-                this.width = parentNode.clientWidth * 0.7;
-                calcDimensions();
-                scaleDisplay();
-            }
-
-            else if (maxHeight < bodyHeight) {
-                this.width = ((maxHeight * bodyWidth) / bodyHeight) / bodyBuilder.WIDTH_MULTIPLIER;
-                calcDimensions();
-                scaleDisplay();
-            }
-
-
-            //Contruindo body
-            bodyBuilder.create();
-            this.drawFrame();
-
-        }
+        this.scaleDisplay();
 
         //States
         this.isOn = false;
@@ -131,8 +58,86 @@ class Game {
         this.level = 1;
         this.maxLevel = 10;
 
+
+        //Carregando recursos e inicializando tela desligada
+        this.body = document.querySelector(selector);
+
+        this.inactiveCell = new Image();
+        this.inactiveCell.src = "./assets/images/inactiveCell.svg";
+
+        this.activeCell = new Image();
+        this.activeCell.src = "./assets/images/activeCell.svg";
+
+        this.inactiveCell.onload = () => {
+            this.turnOff();
+        }
+
+    }
+    calcDimensions() {
+        this.hudWidth = this.width * 0.4;
+
+        this.gameDisplayWidth = this.width - this.hudWidth;
+        this.gameDisplayMargin = this.width * 0.04;
+
+        this.cellMargin = this.width * 0.0005;
+        this.cellSize = this.gameDisplayWidth / this.gridX - this.cellMargin - (this.cellMargin / this.gridX);
+
+        this.height = this.cellSize * this.gridY + (this.cellMargin * (this.gridY + 1)) + (this.gameDisplayMargin * 2);
+    }
+    scaleDisplay() {
+        this.canvas.style.width = `${this.width}px`
+        this.canvas.style.height = `${this.height}px`
+
+        this.scale = Math.ceil(window.devicePixelRatio);
+
+        this.canvas.width = Math.floor(this.width * this.scale);
+        this.canvas.height = Math.floor(this.height * this.scale);
     }
 
+    construct() {
+        //Corrigindo proporções
+        this.bodyBuilder.update(this);
+
+        const font = new FontFace(
+            "retro-gaming",
+            "url(./assets/fonts/digital-7.monoitalic.ttf)"
+        );
+        font.load().then(() => {
+            document.fonts.add(font);
+
+
+            const canvasWidth = parseFloat(this.canvas.style.width.replace("px", ""));
+            const canvasHeight = parseFloat(this.canvas.style.height.replace("px", ""));
+
+            const bodyWidth = canvasWidth * this.bodyBuilder.WIDTH_MULTIPLIER;
+            const bodyHeight = canvasHeight * this.bodyBuilder.HEIGHT_MULTIPLIER;
+
+            const parentNode = this.body.parentNode;
+
+            if (bodyWidth > parentNode.clientWidth) {
+                this.width = parentNode.clientWidth * 0.7;
+            }
+
+            else if (this.maxHeight < bodyHeight) {
+                this.width = ((this.maxHeight * bodyWidth) / bodyHeight) / this.bodyBuilder.WIDTH_MULTIPLIER;
+            }
+
+            this.calcDimensions();
+            this.scaleDisplay();
+
+            this.bodyBuilder.create(() => this.bodyBuilder.bound(this.events));
+            this.body.append(this.canvas);
+            this.drawFrame();
+        });
+    }
+
+    unbound() {
+
+        this.bodyBuilder.unbound();
+
+        this.turnOff();
+        // this.drawFrame();
+    }
 
     gameOver() {
         clearInterval(this.interval);
@@ -262,26 +267,6 @@ class Game {
         })()
     }
 
-    //Commands
-    pressUp() {
-    }
-
-    pressDown() {
-    }
-
-    pressLeft() {
-    }
-
-    pressRight() {
-    }
-
-    pressAction() {
-    }
-
-    //Keys
-    mapKeys() {
-    }
-
     //Actions
     turnOn() {
         this.isOn = true;
@@ -293,11 +278,11 @@ class Game {
 
         this.drawFrame();
         this.drawWelcome();
-
     }
 
     turnOff() {
         this.isOn = false;
+        this.isStart = false;
         clearInterval(this.interval);
 
         this.score = 0;
@@ -361,4 +346,25 @@ class Game {
             audio.play();
         }
     }
+
+    //Commands
+    pressUp() {
+    }
+
+    pressDown() {
+    }
+
+    pressLeft() {
+    }
+
+    pressRight() {
+    }
+
+    pressAction() {
+    }
+
+    mapKeys() {
+
+    }
+
 }

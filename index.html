@@ -22,6 +22,7 @@
     <script src="./js/utils.js"></script>
 
     <script src="./js/game.js"></script>
+
     <script src="./js/tetris/piece.js"></script>
     <script src="./js/tetris/piece1.js"></script>
     <script src="./js/tetris/piece2.js"></script>
@@ -31,15 +32,19 @@
     <script src="./js/tetris/piece6.js"></script>
     <script src="./js/tetris/piece7.js"></script>
     <script src="./js/tetris/tetris.js"></script>
+
+    <script src="./js/menu/menu.js"></script>
+
     <script>
 
-        let tetris = new Tetris(
+        let menu = new Tetris(
             {
                 maxHeight: screen.height - screen.height * 0.25,
                 width: 1200,
                 selector: '#brick-game'
             }
         );
+        menu.construct();
 
     </script>
 
