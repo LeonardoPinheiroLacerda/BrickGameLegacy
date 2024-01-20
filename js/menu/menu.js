@@ -1,43 +1,46 @@
 class Menu extends Game {
 
-    constructor({ width, maxHeight, selector }) {
+    constructor({ width, maxHeight, selector }, shouldResize = true, isOn = false) {
 
         super(
             { width, maxHeight, selector },
             "",
-            {
-                onOnOff: () => {
-                    if (this.isOn) {
-                        this.turnOff();
-                    } else {
-                        this.turnOn();
-                    }
-                },
-                onStart: () => {
-                    if (!this.isOn) return;
-                    if (this.isStart) {
-                        this.pause();
-                    } else {
-                        this.start();
-                    }
-                },
-                onAction: () => {
-                    this.pressAction();
-                },
-                onUp: () => {
-                    this.pressUp();
-                },
-                onDown: () => {
-                    this.pressDown();
-                },
-                onRight: () => {
-                    this.pressRight();
-                },
-                onLeft: () => {
-                    this.pressLeft();
-                },
-            }
+            shouldResize,
+            isOn
         );
+
+        this.events = {
+            onOnOff: () => {
+                if (this.isOn) {
+                    this.turnOff();
+                } else {
+                    this.turnOn();
+                }
+            },
+            onStart: () => {
+                if (!this.isOn) return;
+                if (this.isStart) {
+                    this.pause();
+                } else {
+                    this.start();
+                }
+            },
+            onAction: () => {
+                this.pressAction();
+            },
+            onUp: () => {
+                this.pressUp();
+            },
+            onDown: () => {
+                this.pressDown();
+            },
+            onRight: () => {
+                this.pressRight();
+            },
+            onLeft: () => {
+                this.pressLeft();
+            },
+        }
 
         this.games = [
             {
@@ -47,15 +50,7 @@ class Menu extends Game {
             {
                 title: 'Snake',
                 x: 0.22
-            },
-            {
-                title: 'Runner',
-                x: 0.2
-            },
-            {
-                title: 'Teste',
-                x: 0.22
-            },
+            }
         ]
 
         this.actualGame = 0;
@@ -89,6 +84,7 @@ class Menu extends Game {
 
 
     pressLeft() {
+        if (!this.isOn) return;
         this.actualGame = this.actualGame === 0
             ? this.games.length - 1
             : this.actualGame - 1;
@@ -98,6 +94,7 @@ class Menu extends Game {
     }
 
     pressRight() {
+        if (!this.isOn) return;
         this.actualGame = this.actualGame === this.games.length - 1
             ? 0
             : this.actualGame + 1;
@@ -108,7 +105,16 @@ class Menu extends Game {
 
     start() {
 
-        console.log(this.games[this.actualGame]);
+        switch (this.games[this.actualGame].title) {
+            case 'Tetris':
+                this.unbound();
+                const tetris = new Tetris(this.initData, false, true);
+                tetris.bound();
+                break;
+            case 'Snake':
+                alert("Comming soon");
+                break;
+        }
 
     }
 
@@ -118,24 +124,25 @@ class Menu extends Game {
     }
 
     //Keys
-    mapKeyUp(e) {
-        switch (e.key) {
-            case 'd':
-            case 'D':
-                this.pressRight();
-                break;
-            case 'a':
-            case 'A':
-                this.pressLeft();
-                break;
-        }
+    mapKeys() {
+        document.body.addEventListener("keyup", this.keysUp = ({ key }) => {
+            switch (key) {
+                case 'd':
+                case 'D':
+                    this.pressRight();
+                    break;
+                case 'a':
+                case 'A':
+                    this.pressLeft();
+                    break;
+            }
+        })
     }
 
-    mapKeyPress(e) {
-
+    unbound() {
+        super.unbound();
+        document.body.removeEventListener("keyup", this.keysUp);
+        // this.drawFrame();
     }
 
-    mapKeyDown(e) {
-
-    }
 }

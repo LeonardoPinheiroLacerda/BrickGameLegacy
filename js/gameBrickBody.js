@@ -219,19 +219,29 @@ class GameBrickBody {
         soundBtn.addEventListener("click", this.onSound);
         resetBtn.addEventListener("click", this.onReset);
 
-        upBtn.addEventListener("touchstart", this.touchStartOnUp);
+        upBtn.addEventListener("touchstart", this.touchStartOnUp, {
+            passive: true
+        });
         upBtn.addEventListener("touchend", this.touchEndOnUp);
 
-        downBtn.addEventListener("touchstart", this.touchStartOnDown);
+        downBtn.addEventListener("touchstart", this.touchStartOnDown, {
+            passive: true
+        });
         downBtn.addEventListener("touchend", this.touchEndOnDown);
 
-        rightBtn.addEventListener("touchstart", this.touchStartOnRight);
+        rightBtn.addEventListener("touchstart", this.touchStartOnRight, {
+            passive: true
+        });
         rightBtn.addEventListener("touchend", this.touchEndOnRight);
 
-        leftBtn.addEventListener("touchstart", this.touchStartOnLeft);
+        leftBtn.addEventListener("touchstart", this.touchStartOnLeft, {
+            passive: true
+        });
         leftBtn.addEventListener("touchend", this.touchEndOnLeft);
 
-        actionBtn.addEventListener("touchstart", this.touchStartOnAction);
+        actionBtn.addEventListener("touchstart", this.touchStartOnAction, {
+            passive: true
+        });
         actionBtn.addEventListener("touchend", this.touchEndOnAction);
 
     }

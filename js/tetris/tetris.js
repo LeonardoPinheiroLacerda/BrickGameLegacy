@@ -1,56 +1,60 @@
 class Tetris extends Game {
 
-    constructor({ width, maxHeight, selector }) {
+    constructor({ width, maxHeight, selector }, shouldResize = true, isOn = false) {
 
         super(
             { width, maxHeight, selector },
             "tetrisHiScore",
-            {
-                onOnOff: () => {
-                    if (this.isOn) {
-                        this.turnOff();
-                    } else {
-                        this.turnOn();
-                    }
-                },
-                onStart: () => {
-                    if (!this.isOn) return;
-                    if (this.isStart) {
-                        this.pause();
-                    } else {
-                        this.start();
-                    }
-                },
-                onReset: () => {
-                    if (!this.isOn) return;
-                    this.reset();
-                },
-                onSound: () => {
-                    if (!this.isOn) return;
-                    this.sound();
-                },
-                onAction: () => {
-                    if (!this.isStart) return;
-                    this.pressAction();
-                },
-                onUp: () => {
-                    if (!this.isStart) return;
-                    this.pressUp();
-                },
-                onDown: () => {
-                    if (!this.isStart) return;
-                    this.pressDown();
-                },
-                onRight: () => {
-                    if (!this.isStart) return;
-                    this.pressRight();
-                },
-                onLeft: () => {
-                    if (!this.isStart) return;
-                    this.pressLeft();
-                },
-            }
+            shouldResize,
+            isOn
         );
+
+        this.events = {
+            onOnOff: () => {
+                if (this.isOn) {
+                    this.turnOff();
+                    this.leave();
+                } else {
+                    this.turnOn();
+                }
+            },
+            onStart: () => {
+                if (!this.isOn) return;
+                if (this.isStart) {
+                    this.pause();
+                } else {
+                    this.start();
+                }
+            },
+            onReset: () => {
+                if (!this.isOn) return;
+                this.reset();
+            },
+            onSound: () => {
+                if (!this.isOn) return;
+                this.sound();
+            },
+            onAction: () => {
+                if (!this.isStart) return;
+                this.pressAction();
+            },
+            onUp: () => {
+                if (!this.isStart) return;
+                this.pressUp();
+            },
+            onDown: () => {
+                if (!this.isStart) return;
+                this.pressDown();
+            },
+            onRight: () => {
+                if (!this.isStart) return;
+                this.pressRight();
+            },
+            onLeft: () => {
+                if (!this.isStart) return;
+                this.pressLeft();
+            },
+        }
 
         //Pieces
         this.actualPieceId = 1;
@@ -341,7 +345,7 @@ class Tetris extends Game {
 
     //Keys
     mapKeys() {
-        document.body.addEventListener('keyup', ({ key }) => {
+        document.body.addEventListener('keyup', this.keysUp = ({ key }) => {
 
             switch (key) {
                 case 'd':
@@ -363,7 +367,7 @@ class Tetris extends Game {
             }
         })
 
-        document.body.addEventListener("keydown", ({ key }) => {
+        document.body.addEventListener("keydown", this.keysDown = ({ key }) => {
             switch (key) {
                 case 's':
                 case 'S':
@@ -371,6 +375,13 @@ class Tetris extends Game {
                     break;
             }
         })
+    }
+
+    unbound() {
+        super.unbound();
+        document.body.removeEventListener("keyup", this.keysUp);
+        document.body.removeEventListener("keydown", this.keysDown);
+        // this.drawFrame();
     }
 
 }

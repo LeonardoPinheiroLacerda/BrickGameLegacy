@@ -12,9 +12,13 @@ class Game {
      * - pressRight
      * - pressAction
      */
-    constructor({ width, maxHeight, selector }, hiScoreKey, events) {
+    constructor({ width, maxHeight, selector }, hiScoreKey, shouldResize = true, isOn = false) {
 
-        this.events = events;
+        this.events;
+
+        this.shouldResize = shouldResize;
+
+        this.initData = { width, maxHeight, selector };
 
         this.hiScoreKey = hiScoreKey;
 
@@ -22,6 +26,16 @@ class Game {
         this.gridX = 11;
         this.gridY = 18;
         this.grid = [];
+
+        //Canvas
+        if (document.querySelector(selector + " > canvas")) {
+            this.canvas = document.querySelector(selector + " > canvas");
+        } else {
+            this.canvas = document.createElement("canvas");
+        }
+
+        /** @type{CanvasRenderingContext2D} */
+        this.context = this.canvas.getContext('2d');
 
         //Dimensions
         this.bodyBuilder = new GameBrickBody(this);
@@ -37,17 +51,13 @@ class Game {
         this.frameActionInterval = this.initialFrameActionInterval;
         this.frameCount = 0;
 
-        //Canvas
-        this.canvas = document.createElement("canvas");
-
-        /** @type{CanvasRenderingContext2D} */
-        this.context = this.canvas.getContext('2d');
-
         //Correção de escala para telas com dpi maior
         this.scaleDisplay();
 
+        console.log(isOn)
+
         //States
-        this.isOn = false;
+        this.isOn = isOn;
         this.isStart = false;
         this.isGameOver = false;
         this.isMuted = false;
@@ -57,7 +67,6 @@ class Game {
 
         this.level = 1;
         this.maxLevel = 10;
-
 
         //Carregando recursos e inicializando tela desligada
         this.body = document.querySelector(selector);
@@ -69,11 +78,18 @@ class Game {
         this.activeCell.src = "./assets/images/activeCell.svg";
 
         this.inactiveCell.onload = () => {
-            this.turnOff();
+            if (this.isOn) this.turnOn();
+            else this.turnOff();
         }
+
 
     }
     calcDimensions() {
+        if (!this.shouldResize) {
+            this.width = this.canvas.width;
+            this.height = this.canvas.height;
+        };
+
         this.hudWidth = this.width * 0.4;
 
         this.gameDisplayWidth = this.width - this.hudWidth;
@@ -85,6 +101,8 @@ class Game {
         this.height = this.cellSize * this.gridY + (this.cellMargin * (this.gridY + 1)) + (this.gameDisplayMargin * 2);
     }
     scaleDisplay() {
+        if (!this.shouldResize) return;
+
         this.canvas.style.width = `${this.width}px`
         this.canvas.style.height = `${this.height}px`
 
@@ -105,7 +123,6 @@ class Game {
         font.load().then(() => {
             document.fonts.add(font);
 
-
             const canvasWidth = parseFloat(this.canvas.style.width.replace("px", ""));
             const canvasHeight = parseFloat(this.canvas.style.height.replace("px", ""));
 
@@ -125,18 +142,20 @@ class Game {
             this.calcDimensions();
             this.scaleDisplay();
 
-            this.bodyBuilder.create(() => this.bodyBuilder.bound(this.events));
+            this.bodyBuilder.create(() => this.bound());
             this.body.append(this.canvas);
             this.drawFrame();
         });
     }
 
     unbound() {
-
         this.bodyBuilder.unbound();
-
         this.turnOff();
-        // this.drawFrame();
+    }
+
+    bound() {
+        this.bodyBuilder.bound(this.events);
+        this.mapKeys();
     }
 
     gameOver() {
@@ -345,6 +364,12 @@ class Game {
             audio.volume = 0.025;
             audio.play();
         }
+    }
+
+    leave() {
+        this.unbound();
+        const menu = new Menu(this.initData, false, this.isOn);
+        menu.bound();
     }
 
     //Commands
