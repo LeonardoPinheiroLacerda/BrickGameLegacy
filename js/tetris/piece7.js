@@ -2,7 +2,7 @@ class Piece7 extends Piece {
     constructor(gridX) {
         //Quantidade de estados possiveis
         //Id
-        super(3, 7);
+        super(3, 7, 'yellow');
 
         const middleCell = Math.floor(gridX / 2);
 

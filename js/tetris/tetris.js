@@ -78,11 +78,14 @@ class Tetris extends Game {
 
         this.isGameOver = this.actualPiece.parts
             .map(xy => this.grid[xy.y][xy.x])
-            .some(cell => cell !== 0);
+            .some(cell => cell.value !== 0);
 
         if (!this.isGameOver) {
             this.playSound('./assets/sounds/spawn.wav');
-            this.actualPiece.parts.forEach(({ x, y }) => this.grid[y][x] = this.actualPieceId);
+            this.actualPiece.parts.forEach(({ x, y }) => {
+                this.grid[y][x].value = this.actualPieceId
+                this.grid[y][x].color = this.actualPiece.color
+            });
         } else {
             this.gameOver();
         }
@@ -134,7 +137,7 @@ class Tetris extends Game {
         for (let y = this.grid.length - 1; y >= 0; y--) {
             const row = this.grid[y];
 
-            if (row.every(cell => cell !== 0)) {
+            if (row.every(cell => cell.value !== 0)) {
                 linesCompleted.push(y);
             }
         }
@@ -163,7 +166,7 @@ class Tetris extends Game {
             while (this.grid.length < this.gridY) {
                 const newRow = [];
                 for (let i = 0; i < this.gridX; i++) {
-                    newRow.push(0);
+                    newRow.push({ value: 0 });
                 }
 
                 this.grid = [newRow, ...this.grid];
@@ -185,16 +188,19 @@ class Tetris extends Game {
 
         if (this.nextPiece) {
             const preview = this.nextPiece.getPreviewParts();
+            const color = this.nextPiece.color;
 
             for (let y = 0; y < preview.length; y++) {
                 for (let x = 0; x < preview.length; x++) {
 
                     const isActive = preview[y][x] !== 0;
 
+                    console.log(this.nextPiece)
+
                     const posX = this.width * 0.7 + (x * this.cellSize) + (x * this.cellMargin)
                     const posY = (this.height * 0.5 - ((2 * this.cellSize) + (2 * this.cellMargin))) + (y * this.cellSize) + (y * this.cellMargin)
 
-                    this.drawCell(isActive, posX, posY);
+                    this.drawCell(isActive, posX, posY, color);
                 }
             }
         }

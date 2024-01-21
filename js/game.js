@@ -75,6 +75,27 @@ class Game {
         this.activeCell = new Image();
         this.activeCell.src = "./assets/images/activeCell.svg";
 
+        this.activeCellRed = new Image();
+        this.activeCellRed.src = "./assets/images/activeCellRed.svg";
+
+        this.activeCellBlue = new Image();
+        this.activeCellBlue.src = "./assets/images/activeCellBlue.svg";
+
+        this.activeCellCyan = new Image();
+        this.activeCellCyan.src = "./assets/images/activeCellCyan.svg";
+
+        this.activeCellGreen = new Image();
+        this.activeCellGreen.src = "./assets/images/activeCellGreen.svg";
+
+        this.activeCellPink = new Image();
+        this.activeCellPink.src = "./assets/images/activeCellPink.svg";
+
+        this.activeCellGray = new Image();
+        this.activeCellGray.src = "./assets/images/activeCellGray.svg";
+
+        this.activeCellYellow = new Image();
+        this.activeCellYellow.src = "./assets/images/activeCellYellow.svg";
+
         this.inactiveCell.onload = () => {
             if (this.isOn) this.turnOn();
             else this.turnOff();
@@ -185,9 +206,39 @@ class Game {
         this.context.scale(this.scale, this.scale);
     }
 
-    drawCell(isActive, posX, posY) {
+    drawCell(isActive, posX, posY, color) {
+
+        let activeCell;
+
+        switch (color) {
+            case 'blue':
+                activeCell = this.activeCellBlue;
+                break;
+            case 'cyan':
+                activeCell = this.activeCellCyan;
+                break;
+            case 'green':
+                activeCell = this.activeCellGreen;
+                break;
+            case 'pink':
+                activeCell = this.activeCellPink;
+                break;
+            case 'red':
+                activeCell = this.activeCellRed;
+                break;
+            case 'gray':
+                activeCell = this.activeCellGray;
+                break;
+            case 'yellow':
+                activeCell = this.activeCellYellow;
+                break;
+            default:
+                activeCell = this.activeCell;
+                break;
+        }
+
         const cell = isActive
-            ? this.activeCell
+            ? activeCell
             : this.inactiveCell
 
         this.context.drawImage(cell, posX, posY, this.cellSize, this.cellSize);
@@ -245,12 +296,13 @@ class Game {
                 () => {
                     for (let x = 0; x < this.gridX; x++) {
 
-                        const isActive = this.grid[y][x] !== 0;
+                        const isActive = this.grid[y][x].value !== 0;
+                        const color = this.grid[y][x].color;
 
                         const posX = this.gameDisplayMargin + this.cellMargin + (x * this.cellSize) + (x * this.cellMargin);
                         const posY = this.gameDisplayMargin + this.cellMargin + (y * this.cellSize) + (y * this.cellMargin);
 
-                        this.drawCell(isActive, posX, posY);
+                        this.drawCell(isActive, posX, posY, color);
                     }
                 }
             );
@@ -288,7 +340,7 @@ class Game {
             for (let y = 0; y < this.gridY; y++) {
                 grid.push([]);
                 for (let x = 0; x < this.gridX; x++) {
-                    grid[y][x] = 0;
+                    grid[y][x] = { value: 0 };
                 }
             }
             return grid;

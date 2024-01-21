@@ -1,9 +1,10 @@
 class Piece {
 
-    constructor(rotateStatusCount, id) {
+    constructor(rotateStatusCount, id, color = 'default') {
         this.rotateStatusCount = rotateStatusCount;
         this.id = id;
         this.parts = [];
+        this.color = color;
     }
 
     findCenterCell() {
@@ -35,7 +36,7 @@ class Piece {
             }
 
             if (grid[y]) {
-                if (grid[y][x] !== 0 && grid[y][x] !== pieceId) {
+                if (grid[y][x].value !== 0 && grid[y][x].value !== pieceId) {
                     canRotate = false;
                     break;
                 }
@@ -45,11 +46,14 @@ class Piece {
         if (canRotate) {
 
             this.parts.forEach(({ y, x }) => {
-                grid[y][x] = 0
+                grid[y][x].value = 0
+                grid[y][x].color = this.color;
+
             })
 
             tmpParts.forEach(({ y, x }) => {
-                grid[y][x] = pieceId
+                grid[y][x].value = pieceId
+                grid[y][x].color = this.color;
             })
 
             this.parts = tmpParts;
@@ -68,7 +72,7 @@ class Piece {
             const { x, y } = this.parts[i];
 
             if (grid[y + my]) {
-                canMove = grid[y + my][x + mx] === pieceId || grid[y + my][x + mx] === 0;
+                canMove = grid[y + my][x + mx].value === pieceId || grid[y + my][x + mx].value === 0;
             } else {
                 canMove = false;
             }
@@ -78,7 +82,8 @@ class Piece {
 
         if (canMove) {
             this.parts.forEach(({ x, y }) => {
-                grid[y][x] = 0;
+                grid[y][x].value = 0;
+                grid[y][x].color = this.color;
             })
 
             this.parts = this.parts.map((actualPart) => {
@@ -86,7 +91,8 @@ class Piece {
             })
 
             this.parts.forEach(({ x, y }) => {
-                grid[y][x] = pieceId;
+                grid[y][x].value = pieceId;
+                grid[y][x].color = this.color;
             });
         }
 

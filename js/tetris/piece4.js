@@ -3,7 +3,7 @@ class Piece4 extends Piece {
 
         //Quantidade de estados possiveis
         //Id
-        super(1, 4);
+        super(1, 4, 'green');
 
         const middleCell = Math.floor(gridX / 2);
 
