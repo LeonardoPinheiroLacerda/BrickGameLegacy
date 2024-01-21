@@ -60,6 +60,8 @@ class Game {
         this.isGameOver = false;
         this.isMuted = false;
 
+        this.enableColors = true;
+
         //Score and level
         this.score = 0;
 
@@ -210,32 +212,38 @@ class Game {
 
         let activeCell;
 
-        switch (color) {
-            case 'blue':
-                activeCell = this.activeCellBlue;
-                break;
-            case 'cyan':
-                activeCell = this.activeCellCyan;
-                break;
-            case 'green':
-                activeCell = this.activeCellGreen;
-                break;
-            case 'pink':
-                activeCell = this.activeCellPink;
-                break;
-            case 'red':
-                activeCell = this.activeCellRed;
-                break;
-            case 'gray':
-                activeCell = this.activeCellGray;
-                break;
-            case 'yellow':
-                activeCell = this.activeCellYellow;
-                break;
-            default:
-                activeCell = this.activeCell;
-                break;
+        if (this.enableColors) {
+            switch (color) {
+                case 'blue':
+                    activeCell = this.activeCellBlue;
+                    break;
+                case 'cyan':
+                    activeCell = this.activeCellCyan;
+                    break;
+                case 'green':
+                    activeCell = this.activeCellGreen;
+                    break;
+                case 'pink':
+                    activeCell = this.activeCellPink;
+                    break;
+                case 'red':
+                    activeCell = this.activeCellRed;
+                    break;
+                case 'gray':
+                    activeCell = this.activeCellGray;
+                    break;
+                case 'yellow':
+                    activeCell = this.activeCellYellow;
+                    break;
+                case 'default':
+                default:
+                    activeCell = this.activeCell;
+                    break;
+            }
+        } else {
+            activeCell = this.activeCell;
         }
+
 
         const cell = isActive
             ? activeCell

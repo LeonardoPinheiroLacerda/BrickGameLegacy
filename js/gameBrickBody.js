@@ -6,7 +6,7 @@ class GameBrickBody {
     }
 
     WIDTH_MULTIPLIER = 1.3;
-    HEIGHT_MULTIPLIER = 2.135;
+    HEIGHT_MULTIPLIER = 2.4;
 
     update(game) {
         this.game = game;
@@ -92,6 +92,9 @@ class GameBrickBody {
             this.buttonContainer(controlContainer, 'sound-btn-container', "SOUND", "sm-btn", "sound-btn");
             this.buttonContainer(controlContainer, 'reset-btn-container', "RESET", "sm-btn", "reset-btn");
 
+            this.buttonContainer(controlContainer, 'exit-btn-container', "EXIT", "sm-btn", "exit-btn");
+            this.buttonContainer(controlContainer, 'colors-btn-container', "ENABLE COLORS", "sm-btn", "colors-btn");
+
             callback();
         }
 
@@ -108,7 +111,7 @@ class GameBrickBody {
         onOnOff = () => { console.log("ON_OFF PRESSED") },
         onStart = () => { console.log("START PRESSED") },
         onSound = () => { console.log("SOUND PRESSED") },
-        onReset = () => { console.log("RESET PRESSED") }
+        onReset = () => { console.log("RESET PRESSED") },
     } = {}) {
 
         this.onUp = onUp;
