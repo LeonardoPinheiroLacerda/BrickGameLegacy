@@ -56,7 +56,7 @@ class Snake extends Game {
         }
 
         //Speed
-        this.initialFrameActionInterval = 5;
+        this.initialFrameActionInterval = 10;
         this.frameActionInterval = this.initialFrameActionInterval;
 
 
@@ -99,19 +99,21 @@ class Snake extends Game {
         super.drawGameOver();
     }
 
-    resetGrid() {
-        super.resetGrid();
-    }
-
     renderLevel() {
         for (let i = 0; i < this.gridX; i++) {
-            this.grid[0][i] = 1;
-            this.grid[this.gridY - 1][i] = 1;
+            this.grid[0][i].value = 1;
+            this.grid[0][i].color = 'default';
+
+            this.grid[this.gridY - 1][i].value = 1;
+            this.grid[this.gridY - 1][i].color = 'default';
         }
 
         for (let i = 0; i < this.gridY; i++) {
-            this.grid[i][0] = 1;
-            this.grid[i][this.gridX - 1] = 1;
+            this.grid[i][0].value = 1;
+            this.grid[i][0].color = 'default';
+
+            this.grid[i][this.gridX - 1].value = 1;
+            this.grid[i][this.gridX - 1].color = 'default';
         }
     }
 
@@ -129,7 +131,10 @@ class Snake extends Game {
     }
 
     updateTail() {
-        this.tail.forEach(({ x, y }) => this.grid[y][x] = 0);
+        this.tail.forEach(({ x, y }) => {
+            this.grid[y][x].value = 0;
+            this.grid[y][x].color = 'default';
+        });
 
         this.tail.push({ ...this.head })
 
@@ -137,20 +142,24 @@ class Snake extends Game {
             this.tail.shift()
         }
 
-        this.tail.forEach(({ x, y }) => this.grid[y][x] = this.BODY_CONSTANT);
+        this.tail.forEach(({ x, y }) => {
+            this.grid[y][x].value = this.BODY_CONSTANT
+            this.grid[y][x].color = 'green'
+        });
     }
 
     move() {
 
-        this.grid[this.head.y][this.head.x] = 0;
+        this.grid[this.head.y][this.head.x].value = 0;
+        this.grid[this.head.y][this.head.x].color = 'default';
 
         if (
             this.grid[this.head.y + this.direction.y] !== undefined &&
-            this.grid[this.head.y + this.direction.y][this.head.x + this.direction.x] === this.BLANK_CONSTANT ||
-            this.grid[this.head.y + this.direction.y][this.head.x + this.direction.x] === this.FOOD_CONSTANT
+            this.grid[this.head.y + this.direction.y][this.head.x + this.direction.x].value === this.BLANK_CONSTANT ||
+            this.grid[this.head.y + this.direction.y][this.head.x + this.direction.x].value === this.FOOD_CONSTANT
         ) {
 
-            if (this.grid[this.head.y + this.direction.y][this.head.x + this.direction.x] === this.FOOD_CONSTANT) {
+            if (this.grid[this.head.y + this.direction.y][this.head.x + this.direction.x].value === this.FOOD_CONSTANT) {
                 this.tailSize += 1;
                 this.score += 10;
                 this.actualFoodPlaced -= 1;
@@ -167,7 +176,8 @@ class Snake extends Game {
             this.head.x += this.direction.x;
             this.head.y += this.direction.y;
 
-            this.grid[this.head.y][this.head.x] = this.BODY_CONSTANT;
+            this.grid[this.head.y][this.head.x].value = this.BODY_CONSTANT;
+            this.grid[this.head.y][this.head.x].color = 'green';
         }
 
         else {
@@ -184,8 +194,11 @@ class Snake extends Game {
             const y = getRandomInt(0, this.gridY);
             const x = getRandomInt(0, this.gridX);
 
-            if (this.grid[y][x] === this.BLANK_CONSTANT) {
-                this.grid[y][x] = this.FOOD_CONSTANT;
+            if (this.grid[y][x].value === this.BLANK_CONSTANT) {
+
+                this.grid[y][x].value = this.FOOD_CONSTANT;
+                this.grid[y][x].color = 'red';
+
                 this.actualFoodPlaced += 1;
             } else {
                 this.spanwnFood();
@@ -208,6 +221,8 @@ class Snake extends Game {
         this.tailSize = 2;
         this.tail = [];
 
+        this.foodAmountPlaced = 0;
+
         super.reset();
     }
 
@@ -226,6 +241,8 @@ class Snake extends Game {
         this.tailSize = 2;
         this.tail = [];
 
+        this.foodAmountPlaced = 0;
+
         super.gameOver();
     }
 
@@ -235,7 +252,6 @@ class Snake extends Game {
             this.isGameOver = false;
         }
 
-        this.grid[this.head.y][this.head.x] = this.BODY_CONSTANT;
         this.renderLevel();
 
         super.start(
@@ -251,9 +267,7 @@ class Snake extends Game {
 
             //BeforeNext
             () => {
-                if (this.frameCount % 2 === 0) {
-                    this.grid[this.head.y][this.head.x] = 0;
-                }
+
             }
         );
     }

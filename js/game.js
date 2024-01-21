@@ -340,7 +340,7 @@ class Game {
             for (let y = 0; y < this.gridY; y++) {
                 grid.push([]);
                 for (let x = 0; x < this.gridX; x++) {
-                    grid[y][x] = { value: 0 };
+                    grid[y][x] = { value: 0, color: 'default' };
                 }
             }
             return grid;
