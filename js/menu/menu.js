@@ -103,6 +103,11 @@ class Menu extends Game {
         this.drawWelcome();
     }
 
+    pressAction() {
+        if (!this.isOn) return;
+        this.start();
+    }
+
     start() {
 
         switch (this.games[this.actualGame].title) {
@@ -112,7 +117,9 @@ class Menu extends Game {
                 tetris.bound();
                 break;
             case 'Snake':
-                alert("Comming soon");
+                this.unbound();
+                const snake = new Snake(this.initData, false, true);
+                snake.bound();
                 break;
         }
 
@@ -134,6 +141,10 @@ class Menu extends Game {
                 case 'a':
                 case 'A':
                     this.pressLeft();
+                    break;
+                case 'j':
+                case 'J':
+                    this.pressAction();
                     break;
             }
         })

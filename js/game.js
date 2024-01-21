@@ -54,8 +54,6 @@ class Game {
         //Correção de escala para telas com dpi maior
         this.scaleDisplay();
 
-        console.log(isOn)
-
         //States
         this.isOn = isOn;
         this.isStart = false;
@@ -112,7 +110,7 @@ class Game {
         this.canvas.height = Math.floor(this.height * this.scale);
     }
 
-    construct() {
+    construct(callback) {
         //Corrigindo proporções
         this.bodyBuilder.update(this);
 
@@ -145,6 +143,8 @@ class Game {
             this.bodyBuilder.create(() => this.bound());
             this.body.append(this.canvas);
             this.drawFrame();
+
+            callback(this);
         });
     }
 
@@ -267,6 +267,15 @@ class Game {
     }
 
     drawGameOver() {
+        this.context.fillStyle = "rgb(19, 26, 18)";
+        this.context.font = this.width * 0.11 + "px retro-gaming";
+        this.context.fillText("Game Over!", this.width * 0.085, this.height * 0.2);
+
+        this.context.font = this.width * 0.06 + "px retro-gaming";
+        this.context.fillText("Press start", this.width * 0.19, this.height * 0.35)
+        this.context.fillText("or restart.", this.width * 0.2, this.height * 0.42)
+
+        this.drawHowToPlay();
     }
 
     drawHowToPlay() {

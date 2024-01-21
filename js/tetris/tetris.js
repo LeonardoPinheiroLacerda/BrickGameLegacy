@@ -214,16 +214,7 @@ class Tetris extends Game {
     }
 
     drawGameOver() {
-
-        this.context.fillStyle = "rgb(19, 26, 18)";
-        this.context.font = this.width * 0.11 + "px retro-gaming";
-        this.context.fillText("Game Over!", this.width * 0.085, this.height * 0.2);
-
-        this.context.font = this.width * 0.06 + "px retro-gaming";
-        this.context.fillText("Press start", this.width * 0.19, this.height * 0.35)
-        this.context.fillText("or restart.", this.width * 0.2, this.height * 0.42)
-
-        this.drawHowToPlay();
+        super.drawGameOver();
     }
 
     drawHowToPlay() {
