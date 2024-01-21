@@ -85,7 +85,7 @@ class GameBrickBody {
             this.buttonContainer(controlContainer, "right-btn-container", "D", "btn", "right-btn");
             this.buttonContainer(controlContainer, "left-btn-container", "A", "btn", "left-btn");
 
-            this.buttonContainer(controlContainer, 'action-btn-container', 'J', "lg-btn", "action-btn");
+            this.buttonContainer(controlContainer, 'action-btn-container', 'ACTION', "lg-btn", "action-btn");
 
             this.buttonContainer(controlContainer, 'on-off-btn-container', "ON OFF", "sm-btn", "on-off-btn");
             this.buttonContainer(controlContainer, 'start-pause-btn-container', "START PAUSE", "sm-btn", "start-pause-btn");
