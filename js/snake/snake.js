@@ -221,7 +221,7 @@ class Snake extends Game {
         this.tailSize = 2;
         this.tail = [];
 
-        this.foodAmountPlaced = 0;
+        this.actualFoodPlaced = 0;
 
         super.reset();
     }
@@ -241,7 +241,7 @@ class Snake extends Game {
         this.tailSize = 2;
         this.tail = [];
 
-        this.foodAmountPlaced = 0;
+        this.actualFoodPlaced = 0;
 
         super.gameOver();
     }

@@ -6,7 +6,7 @@ class GameBrickBody {
     }
 
     WIDTH_MULTIPLIER = 1.3;
-    HEIGHT_MULTIPLIER = 2.4;
+    HEIGHT_MULTIPLIER = 2.3;
 
     update(game) {
         this.game = game;

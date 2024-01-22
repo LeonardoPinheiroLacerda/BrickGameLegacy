@@ -159,7 +159,7 @@
 
 .brick-game-body>.controls-container .up-btn-container {
     position: absolute;
-    top: calc(var(--width) * 0.55);
+    top: calc(var(--width) * 0.45);
     left: calc(var(--width) * 0.3);
 }
 
@@ -173,14 +173,14 @@
 
 .brick-game-body>.controls-container>.down-btn-container {
     position: absolute;
-    top: calc(var(--width) * .9);
+    top: calc(var(--width) * .8);
     left: calc(var(--width) * 0.3);
 }
 
 /* Right button */
 .brick-game-body>.controls-container>.right-btn-container {
     position: absolute;
-    top: calc(var(--width) * 0.725);
+    top: calc(var(--width) * 0.625);
     left: calc(var(--width) * 0.475);
 }
 
@@ -198,14 +198,14 @@
 
 .brick-game-body>.controls-container>.left-btn-container {
     position: absolute;
-    top: calc(var(--width) * 0.725);
+    top: calc(var(--width) * 0.625);
     left: calc(var(--width) * 0.125);
 }
 
 /* Action button */
 .brick-game-body>.controls-container>.action-btn-container {
     position: absolute;
-    top: calc(var(--width) * 0.66);
+    top: calc(var(--width) * 0.56);
     right: calc(var(--width) * 0.15);
 }
 
